@@ -1,0 +1,60 @@
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
+      <button type="button" onclick="payWithRave()">Pay Now</button>
+    </form>
+    <script src="./jquery.min.js"></script>
+    <script>
+      const API_publicKey = "FLWPUBK_TEST-aa9897d4795e23f12e0f10bda7eb7c81-X";
+      function payWithRave() {
+        var x = getpaidSetup({
+          PBFPubKey: API_publicKey,
+          customer_email: "user@example.com",
+          country: "GH",
+          amount: 2000,
+          customer_phone: "233509940409",
+          currency: "GHS",
+          txref: "rave-123456",
+          meta: [{
+            metaname: "flightID",
+            metavalue: "AP1234"
+          }],
+          onclose: function() {console.log("closed")},
+          callback: function(response) {
+            var txref = response.data.txRef; // collect txRef returned and pass to a server page to complete status check.
+            console.log("This is the response returned after a charge", response);
+            if (response.data.chargeResponseCode == "0") {
+            // redirect to a success page
+            $.ajax({
+              method: "POST",
+              url: "/api/payment-success",
+              data: response.data.data
+            })
+              .done(function() {
+                alert( "Data sent: ");
+              });
+            } else {
+            // redirect to a failure page.
+            $.ajax({
+              method: "POST",
+              url: "/api/payment-failure",
+              data: response.data.data
+            })
+              .done(function() {
+                alert( "Data sent: ");
+              });
+            }
+            x.close(); // use this to close the modal immediately after payment.
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

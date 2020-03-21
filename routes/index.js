@@ -312,6 +312,10 @@ async function invest(req, res) {
   });
 }
 
+function test_payment(req, res) {
+  return res.send("test");
+}
+
 module.exports = app => {
   app.post("/api/register", create_user_account);
   app.post("/api/login", login);
@@ -320,4 +324,14 @@ module.exports = app => {
   app.get("/api/projects", fetch_projects);
   app.get("/api/projects/:projectId", PARAM_projectId, fetch_project);
   app.post("/api/create-project", requireAuth, create_project);
+
+  //Testing the Rave API
+  app.post("/api/payment-success", (req, res) => {
+    console.log("Success : ", req.body);
+    return res.json({ success: true });
+  });
+  app.post("/api/payment-failure", (req, res) => {
+    console.log("Failure : ", req.body);
+    return res.json({ success: false });
+  });
 };
