@@ -310,7 +310,7 @@ module.exports = app => {
   app.post("/api/register", create_user_account);
   app.post("/api/login", login);
   app.post("/api/edit-profile/", requireAuth, edit_profile);
-  app.post("/api/set-profile-photo/", requireAuth, set_profile_photo);
+  // app.post("/api/set-profile-photo/", requireAuth, set_profile_photo);
   app.get("/api/projects", fetch_projects);
   app.get("/api/projects/:projectId", PARAM_projectId, fetch_project);
   app.post("/api/create-project", requireAuth, create_project);
