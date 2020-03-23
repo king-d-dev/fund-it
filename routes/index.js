@@ -5,14 +5,7 @@ const passport = require("passport");
 const User = mongoose.model("User");
 const Investment = mongoose.model("Investment");
 const Project = mongoose.model("Project");
-const cloudinary = require("cloudinary");
 const jwtSecret = process.env.JWT_SECRET;
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 const PERIODS = ["Weekly", "Monthly", "Quarterly", "Annually"];
 const CATEGORIES = [
@@ -102,9 +95,6 @@ async function create_user_account(req, res) {
     return res.status(401).json({ errors });
   }
 
-  if (req.file) {
-    const uploadedImage = await cloudinary.uploader.upload(req.file.path);
-  }
   const hash = await bcrypt.hash(password, 10);
 
   const user = await User.create({
@@ -169,25 +159,25 @@ async function edit_profile(req, res) {
   return res.status(200).json({ success: true, user });
 }
 
-async function set_profile_photo(req, res) {
-  try {
-    const result = await cloudinary.uploader.upload(req.file.path);
+// async function set_profile_photo(req, res) {
+//   try {
+//     const result = await cloudinary.uploader.upload(req.file.path);
 
-    const user = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        photo: result.url
-      },
-      { new: true, select: { password: false } }
-    );
+//     const user = await User.findByIdAndUpdate(
+//       req.user._id,
+//       {
+//         photo: result.url
+//       },
+//       { new: true, select: { password: false } }
+//     );
 
-    console.log(user.photo);
-    return res.status(200).json({ success: true, user });
-  } catch (error) {
-    console.log("Error:", error);
-    return next(error);
-  }
-}
+//     console.log(user.photo);
+//     return res.status(200).json({ success: true, user });
+//   } catch (error) {
+//     console.log("Error:", error);
+//     return next(error);
+//   }
+// }
 
 async function create_project(req, res) {
   const {
@@ -266,12 +256,12 @@ async function create_project(req, res) {
     return res.status(401).json({ errors });
   }
 
-  const uploadedImage = await cloudinary.uploader.upload(req.file.path);
+  // const uploadedImage = await cloudinary.uploader.upload(req.file.path);
 
   await Project.create({
     ...req.body,
-    _owner: req.user._id,
-    photo: uploadedImage.url
+    _owner: req.user._id
+    // photo: uploadedImage.url
   });
   let user = req.user;
   delete user.password;
