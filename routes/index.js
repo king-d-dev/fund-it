@@ -102,16 +102,20 @@ async function create_user_account(req, res) {
     return res.status(401).json({ errors });
   }
 
-  if (req.file) {
-    const uploadedImage = await cloudinary.uploader.upload(req.file.path);
-  }
+  
+  // if (req.file) {
+  //  const uploadedImage = await cloudinary.uploader.upload(req.file.path);
+  // }
   const hash = await bcrypt.hash(password, 10);
 
+  /**
+    in cases where req.file is not available, variable uploadedImage is never created causing an error here 
+  */
   const user = await User.create({
     ...req.body,
     password: hash,
     userType: req.query.userType,
-    photo: uploadedImage.url
+    // photo: uploadedImage.url
   });
   const token = generateToken(user);
   delete user.password;
@@ -130,7 +134,7 @@ async function login(req, res) {
     return res.status(401).json({ errorMessage: "wrong email or password" });
   }
 
-  const password_correct = bcrypt.compare(password, user.password);
+  const password_correct = await bcrypt.compare(password, user.password);
   if (!password_correct) {
     return res.status(401).json({ errorMessage: "wrong email or password" });
   }
