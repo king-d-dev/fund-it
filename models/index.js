@@ -5,7 +5,8 @@ const UserSchema = new Schema({
   fullName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique: true
   },
   email: {
     type: String,
@@ -25,7 +26,6 @@ const UserSchema = new Schema({
   idType: {
     type: String,
     required: true,
-    unique: true,
     enum: ["Voters", "NHIS", "National ID"]
   },
   userType: { type: String, required: true, enum: ["solicitor", "investor"] }
