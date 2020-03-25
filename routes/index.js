@@ -5,7 +5,14 @@ const passport = require("passport");
 const User = mongoose.model("User");
 const Investment = mongoose.model("Investment");
 const Project = mongoose.model("Project");
+const cloudinary = require("cloudinary");
 const jwtSecret = process.env.JWT_SECRET;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const PERIODS = ["Weekly", "Monthly", "Quarterly", "Annually"];
 const CATEGORIES = [
@@ -66,7 +73,8 @@ async function create_user_account(req, res) {
     email: [],
     password: [],
     idNumber: [],
-    confirm_password: []
+    confirm_password: [],
+    photo: []
   };
 
   let existing_user = await User.findOne({ email });
@@ -74,8 +82,8 @@ async function create_user_account(req, res) {
     errors.email.push("this email is associated with an existing account");
   }
 
-  if (idNumber.length !== 10) {
-    errors.idNumber.push("ID number must be 14 characters long");
+  if (idNumber.length < 14) {
+    errors.idNumber.push("ID number must not be less than 14 characters long");
   }
 
   if (password.length < 8) {
@@ -84,6 +92,10 @@ async function create_user_account(req, res) {
 
   if (password !== confirmPassword) {
     errors.password.push("passwords do not match");
+  }
+
+  if ((!req.files && !req.files.photo) || !req.files.photo.name) {
+    errors.photo.push("Please upload a profile photo");
   }
 
   const error_count = Object.keys(errors).reduce(
@@ -95,18 +107,28 @@ async function create_user_account(req, res) {
     return res.status(401).json({ errors });
   }
 
-  const hash = await bcrypt.hash(password, 10);
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    const uploadedImage = await cloudinary.uploader.upload(
+      req.files.photo.tempFilePath
+    );
 
-  const user = await User.create({
-    ...req.body,
-    password: hash,
-    userType: req.query.userType,
-    photo: uploadedImage.url
-  });
-  const token = generateToken(user);
-  delete user.password;
+    /**
+      in cases where req.file is not available, variable uploadedImage is never created causing an error here 
+    */
+    const user = await User.create({
+      ...req.body,
+      password: hash,
+      userType: req.query.userType,
+      photo: uploadedImage.url
+    });
+    const token = generateToken(user);
 
-  return res.status(200).json({ token, user });
+    return res.status(200).json({ token, user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("");
+  }
 }
 
 async function login(req, res) {
@@ -120,7 +142,7 @@ async function login(req, res) {
     return res.status(401).json({ errorMessage: "wrong email or password" });
   }
 
-  const password_correct = bcrypt.compare(password, user.password);
+  const password_correct = await bcrypt.compare(password, user.password);
   if (!password_correct) {
     return res.status(401).json({ errorMessage: "wrong email or password" });
   }
@@ -159,25 +181,25 @@ async function edit_profile(req, res) {
   return res.status(200).json({ success: true, user });
 }
 
-// async function set_profile_photo(req, res) {
-//   try {
-//     const result = await cloudinary.uploader.upload(req.file.path);
+async function set_profile_photo(req, res) {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
 
-//     const user = await User.findByIdAndUpdate(
-//       req.user._id,
-//       {
-//         photo: result.url
-//       },
-//       { new: true, select: { password: false } }
-//     );
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        photo: result.url
+      },
+      { new: true, select: { password: false } }
+    );
 
-//     console.log(user.photo);
-//     return res.status(200).json({ success: true, user });
-//   } catch (error) {
-//     console.log("Error:", error);
-//     return next(error);
-//   }
-// }
+    console.log(user.photo);
+    return res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.log("Error:", error);
+    return next(error);
+  }
+}
 
 async function create_project(req, res) {
   const {
@@ -310,7 +332,7 @@ module.exports = app => {
   app.post("/api/register", create_user_account);
   app.post("/api/login", login);
   app.post("/api/edit-profile/", requireAuth, edit_profile);
-  // app.post("/api/set-profile-photo/", requireAuth, set_profile_photo);
+  app.post("/api/set-profile-photo/", requireAuth, set_profile_photo);
   app.get("/api/projects", fetch_projects);
   app.get("/api/projects/:projectId", PARAM_projectId, fetch_project);
   app.post("/api/create-project", requireAuth, create_project);
