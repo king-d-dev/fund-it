@@ -94,7 +94,7 @@ async function create_user_account(req, res) {
     errors.password.push('passwords do not match');
   }
 
-  if (!req.files) {
+  if ((!req.files && !req.files.photo) || !req.files.photo.name) {
     errors.photo.push('Please upload a profile photo');
   }
 
@@ -126,7 +126,8 @@ async function create_user_account(req, res) {
 
     return res.status(200).json({ token, user });
   } catch (error) {
-    return res.status(500).json({ errorMessage: error.message });
+    console.log(error);
+    return res.status(500).send('');
   }
 }
 
