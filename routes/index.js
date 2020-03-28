@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jwt-simple');
@@ -94,7 +96,7 @@ async function create_user_account(req, res) {
     errors.password.push('passwords do not match');
   }
 
-  if ((!req.files && !req.files.photo) || !req.files.photo.name) {
+  if (!req.files || !req.files.photo || !req.files.photo.name) {
     errors.photo.push('Please upload a profile photo');
   }
 
@@ -109,22 +111,35 @@ async function create_user_account(req, res) {
 
   try {
     const hash = await bcrypt.hash(password, 10);
-    const uploadedImage = await cloudinary.uploader.upload(
-      req.files.photo.tempFilePath
-    );
+    // const uploadedImage = await cloudinary.uploader.upload(
+    //   req.files.photo.tempFilePath
+    // );
 
-    /**
-      in cases where req.file is not available, variable uploadedImage is never created causing an error here 
-    */
-    const user = await User.create({
-      ...req.body,
-      password: hash,
-      userType: req.query.userType,
-      photo: uploadedImage.url
-    });
-    const token = generateToken(user);
+    if (req.files && req.files.photo) {
+      const store = path.resolve(__dirname, '..', 'store');
+      const image_path = path.join(store, req.files.photo.name);
 
-    return res.status(200).json({ token, user });
+      if (!fs.existsSync(store)) {
+        fs.mkdirSync(store);
+      }
+      req.files.photo.mv(image_path, async error => {
+        if (error) return res.status(500).send(error.message);
+
+        /**
+            in cases where req.file is not available, variable uploadedImage is never 
+            created causing an error here 
+          */
+        const user = await User.create({
+          ...req.body,
+          password: hash,
+          userType: req.query.userType,
+          photo: image_path
+        });
+        const token = generateToken(user);
+
+        return res.status(200).json({ token, user });
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).send('');
@@ -149,7 +164,6 @@ async function login(req, res) {
 
   const token = generateToken(user);
 
-  delete user.password;
   res.status(200).json({ token, user });
 }
 
