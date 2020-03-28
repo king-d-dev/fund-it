@@ -292,12 +292,12 @@ async function create_project(req, res) {
     return res.status(401).json({ errors });
   }
 
-  const uploadedImage = await cloudinary.uploader.upload(req.file.path);
+  // const uploadedImage = await cloudinary.uploader.upload(req.file.path);
 
   await Project.create({
     ...req.body,
-    _owner: req.user._id,
-    photo: uploadedImage.url
+    _owner: req.user._id
+    // photo: uploadedImage.url
   });
   let user = req.user;
   delete user.password;
