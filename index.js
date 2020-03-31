@@ -24,7 +24,7 @@ app.use(fileUpload());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 require('./models');
 require('./passport-config');
