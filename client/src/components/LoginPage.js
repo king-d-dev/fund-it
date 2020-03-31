@@ -18,7 +18,7 @@ function LoginPage() {
     <Modal size="tiny" trigger={<Button>Login</Button>}>
       <Modal.Header>Login In to your account</Modal.Header>
       <Modal.Content>
-        <Form onSubmit={submitForm}>
+        <Form onSubmit={submitForm} loading={authState.loading}>
           <Form.Field
             label="Email"
             control={Input}
