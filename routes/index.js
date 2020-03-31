@@ -129,15 +129,20 @@ async function create_user_account(req, res) {
             in cases where req.file is not available, variable uploadedImage is never 
             created causing an error here 
           */
-        const user = await User.create({
+        User.create({
           ...req.body,
           password: hash,
           userType: req.query.userType,
           photo: image_path
-        });
-        const token = generateToken(user);
+        })
+          .then(user => {
+            const token = generateToken(user);
 
-        return res.status(200).json({ token, user });
+            return res.status(200).json({ token, user });
+          })
+          .catch(error => {
+            return res.status(500).send({ errorMessage: error.message });
+          });
       });
     }
   } catch (error) {

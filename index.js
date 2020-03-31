@@ -1,4 +1,5 @@
 const http = require('http');
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -28,6 +29,16 @@ app.use(express.static('public'));
 require('./models');
 require('./passport-config');
 require('./routes')(app);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname, 'client', 'build')));
+
+  app.get('*', (req, res) => {
+    return res.sendFile(
+      path.resolve(__dirname, 'client', 'build', 'index.html')
+    );
+  });
+}
 
 const PORT = process.env.PORT || 3005;
 http
