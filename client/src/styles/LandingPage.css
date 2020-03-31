@@ -1,0 +1,28 @@
+.marketing-text-wrapper {
+  background: url('../images/bg_img.jpg') center center no-repeat;
+  background-size: cover;
+  height: 500px;
+}
+
+.marketng_text h3 {
+  font-size: 50px;
+  text-transform: capitalize;
+}
+
+.marketng_text label {
+  width: 500px;
+}
+
+.main-content .marketng_text {
+  font-size: 20px;
+  color: #fff;
+  display: flex;
+  height: inherit;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured-projects-wrapper {
+  padding: 50px 130px;
+}

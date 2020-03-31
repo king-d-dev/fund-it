@@ -1,0 +1,36 @@
+#ProjetDetail {
+  padding: 40px 150px;
+  background-color: #fdfdfd4d;
+}
+
+#ProjetDetail #content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-img {
+  width: 700px;
+  border-radius: 4px;
+}
+
+.created-at {
+  border-right: 2px solid #dadada;
+  margin-right: 15px;
+  padding-right: 15px;
+}
+
+.meta-info {
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+  width: 700px;
+  padding: 15px;
+  margin: 25px 0;
+}
+
+#ProjetDetail .category span {
+  color: #2527238c;
+}
+
+.raised-amt {
+  font-size: 25px;
+}
