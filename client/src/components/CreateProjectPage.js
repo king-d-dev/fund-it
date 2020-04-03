@@ -85,7 +85,7 @@ function CreateProjectPage() {
       <Header as="h2" style={{ marginBottom: 40 }}>
         Create a new Project
       </Header>
-      <Form onSubmit={submitForm}>
+      <Form onSubmit={submitForm} id="create-project">
         <Form.Input
           label="Project Title"
           value={state.title}
@@ -136,7 +136,7 @@ function CreateProjectPage() {
         />
 
         <Form.Field
-          label="Investors Receive returns ?"
+          label="Investors Receive returns every"
           control={Select}
           placeholder="what time intervals do investors receive their returns"
           value={state.returnPeriod}

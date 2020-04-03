@@ -23,8 +23,12 @@ const actions = {
     // clear all previous errors and error messages from pevious requests before proceeding
     dispatch({ type: 'seterrors', payload: {} });
 
+    let formData = new FormData(document.getElementById('create-project'));
+    formData.append(payload.returnPeriod);
+    formData.append(payload.category);
+
     fundItApi
-      .post('/create-project', { ...payload })
+      .post('/create-project', formData)
       .then(({ data }) => {
         console.log(data);
         dispatch({ type: 'createProject', payload: data.projects });
