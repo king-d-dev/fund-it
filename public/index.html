@@ -11,6 +11,8 @@
       <button type="button" onclick="payWithRave()">Pay Now</button>
     </form>
     <script src="./jquery.min.js"></script>
+    <script src="./sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       const API_publicKey = "FLWPUBK_TEST-aa9897d4795e23f12e0f10bda7eb7c81-X";
       function payWithRave() {
@@ -28,30 +30,45 @@
           }],
           onclose: function() {console.log("closed")},
           callback: function(response) {
+            x.close(); // use this to close the modal immediately after payment.
             var txref = response.data.txRef; // collect txRef returned and pass to a server page to complete status check.
             console.log("This is the response returned after a charge", response);
-            if (response.data.chargeResponseCode == "0") {
-            // redirect to a success page
-            $.ajax({
-              method: "POST",
-              url: "/api/payment-success",
-              data: response.data.data
-            })
-              .done(function() {
-                alert( "Data sent: ");
-              });
+            if (response.data) {
+              swal({
+                text: 'Investment Attempt was accepted. Hang on while we verify the payment.',
+                title: 'Project Investment',
+                icon: 'info',
+                button: 'OK'
+              })
+              // redirect to a success page
+              axios
+                .post("/api/projects/5e713d9dfa0f95204ce8197c/invest", {txref})
+                .then(function(response) {
+                  if(response.status === 200 && response.data) {
+                    swal({
+                      text: `Investment of GHC${response.data.amount} successfully made.`,
+                      title: 'Project Investment',
+                      icon: 'success',
+                      button: 'OK'
+                    });
+                  } else {
+                    swal({
+                      text: response.errorMessage,
+                      title: 'Project Investment',
+                      icon: 'error',
+                      button: 'OK'
+                    })
+                  }
+                })
             } else {
             // redirect to a failure page.
-            $.ajax({
-              method: "POST",
-              url: "/api/payment-failure",
-              data: response.data.data
-            })
-              .done(function() {
-                alert( "Data sent: ");
-              });
+              swal({
+                text: 'Investment Attempt failed. Please try again later.',
+                title: 'Project Investment',
+                icon: 'error',
+                button: 'OK'
+              })
             }
-            x.close(); // use this to close the modal immediately after payment.
           }
         });
       }
