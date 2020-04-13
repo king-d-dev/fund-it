@@ -17,7 +17,7 @@ const reducer = (state, { type, payload }) => {
 };
 
 const actions = {
-  createProject: dispatch => payload => {
+  createProject: (dispatch) => (payload) => {
     dispatch({ type: 'setloading', payload: true });
 
     // clear all previous errors and error messages from pevious requests before proceeding
@@ -40,14 +40,14 @@ const actions = {
       .finally(() => {
         dispatch({ type: 'setloading', payload: false });
       });
-  }
+  },
 };
 
 const categories = [
   'Engineering & Manufacturing',
   'Science & Research',
   'Social Development',
-  'Fashion & Design'
+  'Fashion & Design',
 ];
 
 const projects = [
@@ -59,7 +59,7 @@ const projects = [
     category: categories[0],
     imgSrc: require('../images/science-project.jpg'),
     description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.'
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
   {
     title: 'Locally manufactured car engine',
@@ -69,7 +69,7 @@ const projects = [
     category: categories[1],
     imgSrc: require('../images/engineering-proj.jpg'),
     description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.'
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
   {
     title: 'Home made Shirts',
@@ -79,7 +79,7 @@ const projects = [
     category: categories[2],
     imgSrc: require('../images/clothing.jpg'),
     description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.'
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
   {
     title: 'A fight against Poverty',
@@ -89,8 +89,8 @@ const projects = [
     category: categories[3],
     imgSrc: require('../images/social-proj.jpg'),
     description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.'
-  }
+      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
+  },
 ];
 
 const returnsPeriods = ['Weekly', 'Monthly', 'Quarterly', 'Annualy'];
@@ -100,7 +100,7 @@ const initialState = {
   categories,
   returnsPeriods,
   loading: false,
-  errors: {}
+  errors: {},
 };
 
 export const { Provider, Context } = createDataContext(

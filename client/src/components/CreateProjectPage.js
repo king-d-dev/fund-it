@@ -1,5 +1,5 @@
-import React, { useReducer, useContext } from 'react';
-import { Context as projectsContext } from '../context/projectsContext';
+import React, { useReducer, useContext } from "react";
+import { Context as projectsContext } from "../context/projectsContext";
 
 import {
   Form,
@@ -8,25 +8,25 @@ import {
   Select,
   Button,
   Input
-} from 'semantic-ui-react';
+} from "semantic-ui-react";
 
-import '../styles/CreateProjectPage.css';
+import "../styles/CreateProjectPage.css";
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
-    case 'setTitle':
+    case "setTitle":
       return { ...state, title: payload };
-    case 'setFundTarget':
+    case "setFundTarget":
       return { ...state, fundTarget: payload };
-    case 'setBIN':
+    case "setBIN":
       return { ...state, BIN: payload };
-    case 'setReturnRate':
+    case "setReturnRate":
       return { ...state, returnRate: payload };
-    case 'setReturnPeriod':
+    case "setReturnPeriod":
       return { ...state, returnPeriod: payload };
-    case 'setCategory':
+    case "setCategory":
       return { ...state, category: payload };
-    case 'setDescription':
+    case "setDescription":
       return { ...state, desciption: payload };
     default:
       return state;
@@ -34,14 +34,14 @@ const reducer = (state, { type, payload }) => {
 };
 
 const initialState = {
-  title: 'A novel Approach to Refuse collection',
+  title: "A novel Approach to Refuse collection",
   description:
-    'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  category: 'Engineering & Manufacturing',
-  BIN: 'BN1556165151',
-  returnRate: '5',
-  returnPeriod: 'Monthly',
-  fundTarget: '5000'
+    "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.",
+  category: "Engineering & Manufacturing",
+  BIN: "BN1556165151",
+  returnRate: "5",
+  returnPeriod: "Monthly",
+  fundTarget: "5000"
 };
 
 function CreateProjectPage() {
@@ -71,11 +71,11 @@ function CreateProjectPage() {
     const error = errors[formField];
     if (!error || !error.length) return {};
 
-    const message = error.join(', ');
+    const message = error.join(", ");
     return {
       error: {
         content: message,
-        pointing: 'below'
+        pointing: "below"
       }
     };
   };
@@ -91,12 +91,12 @@ function CreateProjectPage() {
           value={state.title}
           name="title"
           onChange={e =>
-            dispatch({ type: 'setTitle', payload: e.target.value })
+            dispatch({ type: "setTitle", payload: e.target.value })
           }
           fluid
           placeholder="Please provide project title"
           id="form-input-first-name"
-          {...showErrorProp('title')}
+          {...showErrorProp("title")}
         />
 
         <Form.Input
@@ -104,22 +104,22 @@ function CreateProjectPage() {
           value={state.fundTarget}
           name="fundTarget"
           onChange={e =>
-            dispatch({ type: 'setFundTarget', payload: e.target.value })
+            dispatch({ type: "setFundTarget", payload: e.target.value })
           }
           fluid
           type="number"
           placeholder="please provide the amount needed to fund the project"
-          {...showErrorProp('fundTarget')}
+          {...showErrorProp("fundTarget")}
         />
 
         <Form.Input
           label="Business Identification Number"
           value={state.BIN}
           name="BIN"
-          onChange={e => dispatch({ type: 'setBIN', payload: e.target.value })}
+          onChange={e => dispatch({ type: "setBIN", payload: e.target.value })}
           fluid
           placeholder="please provide the unique number that was given when you registered your business"
-          {...showErrorProp('BNI')}
+          {...showErrorProp("BNI")}
         />
 
         <Form.Input
@@ -127,12 +127,12 @@ function CreateProjectPage() {
           value={state.returnRate}
           name="returnRate"
           onChange={e =>
-            dispatch({ type: 'setReturnRate', payload: e.target.value })
+            dispatch({ type: "setReturnRate", payload: e.target.value })
           }
           fluid
           type="number"
           placeholder="NB: as a percentage of their investment "
-          {...showErrorProp('returnRate')}
+          {...showErrorProp("returnRate")}
         />
 
         <Form.Field
@@ -142,10 +142,10 @@ function CreateProjectPage() {
           value={state.returnPeriod}
           name="returnPeriod"
           onChange={(e, data) =>
-            dispatch({ type: 'setReturnPeriod', payload: data.value })
+            dispatch({ type: "setReturnPeriod", payload: data.value })
           }
           options={returnsOptions}
-          {...showErrorProp('returnPeriod')}
+          {...showErrorProp("returnPeriod")}
         />
 
         <Form.Field
@@ -155,10 +155,10 @@ function CreateProjectPage() {
           value={state.category}
           name="category"
           onChange={(e, data) =>
-            dispatch({ type: 'setCategory', payload: data.value })
+            dispatch({ type: "setCategory", payload: data.value })
           }
           options={categoryOptions}
-          {...showErrorProp('category')}
+          {...showErrorProp("category")}
         />
 
         <Form.Field
@@ -167,7 +167,7 @@ function CreateProjectPage() {
           name="photo"
           type="file"
           accept="image/*"
-          {...showErrorProp('photo')}
+          {...showErrorProp("photo")}
         />
 
         <Form.Field
@@ -177,13 +177,13 @@ function CreateProjectPage() {
           placeholder="Please provide a short description of the project"
           value={state.description}
           onChange={e =>
-            dispatch({ type: 'setDescription', payload: e.target.value })
+            dispatch({ type: "setDescription", payload: e.target.value })
           }
           style={{ minHeight: 100 }}
-          {...showErrorProp('description')}
+          {...showErrorProp("description")}
         />
 
-        <Form.Field style={{ textAlign: 'center' }}>
+        <Form.Field style={{ textAlign: "center" }}>
           <Button positive>submit</Button>
         </Form.Field>
       </Form>
