@@ -24,13 +24,13 @@ const actions = {
     dispatch({ type: 'seterrors', payload: {} });
 
     let formData = new FormData(document.getElementById('create-project'));
-    formData.append(payload.returnPeriod);
-    formData.append(payload.category);
+    formData.append('returnPeriod', payload.returnPeriod);
+    formData.append('category', payload.category);
 
     fundItApi
       .post('/create-project', formData)
       .then(({ data }) => {
-        console.log(data);
+        console.log('done with', data);
         dispatch({ type: 'createProject', payload: data.projects });
       })
       .catch(({ response: { data } }) => {
