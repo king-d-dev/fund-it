@@ -14,7 +14,8 @@
     "react-ravepayment": "^3.0.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "semantic-ui-react": "^0.88.2"
+    "semantic-ui-react": "^0.88.2",
+    "sweetalert-react": "^0.4.11"
   },
   "scripts": {
     "start": "react-scripts start",
