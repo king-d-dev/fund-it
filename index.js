@@ -29,6 +29,7 @@ app.use(express.static('public'));
 require('./models');
 require('./passport-config');
 require('./routes')(app);
+// require('./controller/paymentHandler')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, 'client', 'build')));
