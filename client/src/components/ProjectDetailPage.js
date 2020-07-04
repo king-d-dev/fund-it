@@ -58,7 +58,7 @@ function ProjectDetailPage(props) {
               <span style={{ marginRight: 10 }}>
                 <strong>Created By</strong>
               </span>
-              <Image src={require('../images/user.jpg')} avatar />
+              <Image src={require('../assets/images/user.jpg')} avatar />
               <span
                 style={{ borderRight: '2px solid #dadada', paddingRight: 15 }}
               >

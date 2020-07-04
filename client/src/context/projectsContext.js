@@ -58,7 +58,7 @@ const projects = [
     raisedAmount: 100,
     createdAt: '2 days ago',
     category: categories[0],
-    imgSrc: require('../images/science-project.jpg'),
+    imgSrc: require('../assets/images/science-project.jpg'),
     description:
       'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
@@ -68,7 +68,7 @@ const projects = [
     raisedAmount: 100,
     createdAt: '13 days ago',
     category: categories[1],
-    imgSrc: require('../images/engineering-proj.jpg'),
+    imgSrc: require('../assets/images/engineering-proj.jpg'),
     description:
       'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
@@ -78,7 +78,7 @@ const projects = [
     raisedAmount: 200,
     createdAt: '1 days ago',
     category: categories[2],
-    imgSrc: require('../images/clothing.jpg'),
+    imgSrc: require('../assets/images/clothing.jpg'),
     description:
       'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },
@@ -88,7 +88,7 @@ const projects = [
     raisedAmount: 20,
     createdAt: '10 days ago',
     category: categories[3],
-    imgSrc: require('../images/social-proj.jpg'),
+    imgSrc: require('../assets/images/social-proj.jpg'),
     description:
       'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
   },

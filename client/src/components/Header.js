@@ -15,33 +15,33 @@ const options = [
     text: 'Profile',
     icon: 'user',
     value: 'profile',
-    route: '/profile'
+    route: '/profile',
   },
   {
     key: 'create project',
     text: 'Create Project',
     icon: 'add',
     value: 'create project',
-    route: '/create-project'
+    route: '/create-project',
   },
   {
     key: 'settings',
     text: 'Settings',
     icon: 'settings',
     value: 'settings',
-    route: '/settings'
+    route: '/settings',
   },
   {
     key: 'sign-out',
     text: 'Sign Out',
     icon: 'sign out',
     value: 'sign-out',
-    route: '/sign-out'
-  }
+    route: '/sign-out',
+  },
 ];
 
 const handleClick = (e, data) => {
-  const option = data.options.find(i => i.value === data.value);
+  const option = data.options.find((i) => i.value === data.value);
 
   if (option) history.push(option.route);
 };
@@ -59,12 +59,12 @@ function Header() {
             Signed in as <strong> {authState.user.fullName} </strong>
           </span>
         ),
-        disabled: true
+        disabled: true,
       };
 
       const trigger = (
         <span style={{ fontWeight: 600 }}>
-          <Image avatar src={require('../images/user.jpg')} />{' '}
+          <Image avatar src={require('../assets/images/user.jpg')} />{' '}
           {authState.user.fullName}
         </span>
       );

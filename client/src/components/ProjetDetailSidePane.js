@@ -16,9 +16,9 @@ const FeedItem = ({ imgSrc, createdAt, content }) => {
   );
 };
 
-const imgSrc = require('../images/user.jpg');
-const imgSrc1 = require('../images/user-1.png');
-const imgSrc2 = require('../images/user-2.png');
+const imgSrc = require('../assets/images/user.jpg');
+const imgSrc1 = require('../assets/images/user-1.png');
+const imgSrc2 = require('../assets/images/user-2.png');
 
 const ProjectDetailSidePane = (props) => {
   let [randomColor, setRandomColor] = useState('purple');

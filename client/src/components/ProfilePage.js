@@ -7,18 +7,18 @@ import { Context as projectsContext } from '../context/projectsContext';
 
 function ProfilePage() {
   const {
-    state: { user }
+    state: { user },
   } = useContext(authContext);
 
   const {
-    state: { projects }
+    state: { projects },
   } = useContext(projectsContext);
 
   return (
     <div style={styles.container}>
       <div id="user-details" style={{ width: '50%', paddingRight: 25 }}>
         <Image
-          src={require('../images/user-1.png')}
+          src={require('../assets/images/user-1.png')}
           size="small"
           style={{ borderRadius: 4 }}
         />
@@ -50,6 +50,6 @@ const styles = {
   container: {
     display: 'flex',
     padding: 25,
-    backgroundColor: '#fdfdfd4d'
-  }
+    backgroundColor: '#fdfdfd4d',
+  },
 };
