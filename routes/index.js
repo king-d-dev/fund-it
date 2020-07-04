@@ -8,7 +8,15 @@ const axios = require('axios');
 const User = mongoose.model('User');
 const Investment = mongoose.model('Investment');
 const Project = mongoose.model('Project');
-const { create_project } = require('../controller/projectControler');
+
+const {
+  create_project,
+  fetch_projects,
+} = require('../controller/projectControler');
+const {
+  verifyTransaction,
+  createProjectInvestment,
+} = require('../controller/paymentController');
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -211,60 +219,9 @@ async function set_profile_photo(req, res) {
   }
 }
 
-async function fetch_projects(req, res) {
-  let projects;
-  if (req.query.category) {
-    projects = await Project.find({ category: req.query.category });
-  } else if (req.query.search) {
-    projects = await Project.find({ $text: { $search: req.query.search } });
-  } else {
-    projects = await Project.find();
-  }
-
-  return res.status(200).json({ projects });
-}
-
 async function fetch_project(req, res) {
   return res.status(200).json({ project: req.project });
 }
-
-async function invest(req, res) {
-  var payload = {
-    SECKEY: 'FLWSECK-e6db11d1f8a6208de8cb2f94e293450e-X',
-    txref: req.body.txref,
-  };
-
-  var server_url = 'https://api.ravepay.com/flwv3-pug/getpaidx/api/v2/verify';
-  //please make sure to change this to production url when you go live
-
-  //make a post request to the server
-  axios.post(server_url, payload).then(function (response) {
-    const { status, chargecode, amount } = response.body.data;
-    if (status === 'successful' && chargecode == 00) {
-      if (!amount || amount <= 0) {
-        return res
-          .status(401)
-          .json({ errorMessage: 'Please enter a valid amount to invest' });
-      }
-      Investment.create({
-        _investor: req.user._id,
-        _project: req.project,
-        amount,
-      });
-
-      return res.status(200).json({ success: true, amount });
-    } else {
-      return res
-        .status(401)
-        .json({ errorMessage: 'Investment attempt failed. Try again later' });
-    }
-  });
-}
-
-const {
-  verifyTransaction,
-  createProjectInvestment,
-} = require('../controller/paymentController');
 
 module.exports = (app) => {
   app.post('/api/register', create_user_account);
@@ -274,7 +231,6 @@ module.exports = (app) => {
   app.get('/api/projects', fetch_projects);
   app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
   app.post('/api/create-project', requireAuth, create_project);
-  // app.post('/api/project/payment-intent', requireAuth, initiatePaymentProcess);
   app.get('/api/verify-transaction', verifyTransaction);
   app.get('/api/projects/:projectId/invest', createProjectInvestment);
 };

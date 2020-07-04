@@ -11,11 +11,11 @@ let history;
 
 const options = [
   {
-    key: 'user',
-    text: 'Profile',
-    icon: 'user',
+    key: 'dashboard',
+    text: 'Dashboard',
+    icon: 'dashboard',
     value: 'profile',
-    route: '/profile',
+    route: '/dashboard',
   },
   {
     key: 'create project',

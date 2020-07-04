@@ -14,7 +14,7 @@ import ProjectsPage from './components/ProjectsPage';
 import ProjectDetailPage from './components/ProjectDetailPage';
 import CreateProjectPage from './components/CreateProjectPage';
 import SignOutPage from './components/SignOutPage';
-import ProfilePage from './components/ProfilePage';
+import DashBoardPage from './components/DashBoardPage';
 import SettingsPage from './components/SettingsPage';
 
 import './styles/App.css';
@@ -32,8 +32,8 @@ function App() {
                 <SignOutPage />
               </Route>
 
-              <Route path="/profile">
-                <ProfilePage />
+              <Route path="/dashboard">
+                <DashBoardPage />
               </Route>
 
               <Route path="/settings">

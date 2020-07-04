@@ -1,11 +1,17 @@
 import createDataContext from './createDataContext';
 import fundItApi from '../api/fundIt';
+import {
+  SET_ERRORS,
+  SET_ERROR_MESSAGE,
+  CREATE_PROJECT,
+  SET_PROJECTS,
+} from './actionsTypes/projects';
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'setloading':
       return { ...state, loading: payload };
-    case 'setprojects':
+    case SET_PROJECTS:
       return { ...state, projects: payload };
     case 'createProject':
       return { ...state, projects: payload };
@@ -17,7 +23,24 @@ const reducer = (state, { type, payload }) => {
 };
 
 const actions = {
-  createProject: (dispatch) => (payload) => {
+  getProjects: (dispatch) => (filters, callback) => {
+    let err;
+
+    fundItApi
+      .get('/projects', { params: filters })
+      .then(({ data }) => {
+        dispatch({ type: SET_PROJECTS, payload: data.projects });
+      })
+      .catch((error) => {
+        err = error;
+      })
+      .finally(() => {
+        if (callback) callback(err);
+      });
+  },
+
+  createProject: (dispatch) => (payload, callback) => {
+    let err;
     dispatch({ type: 'setloading', payload: true });
 
     // clear all previous errors and error messages from pevious requests before proceeding
@@ -36,10 +59,10 @@ const actions = {
       .catch(({ response: { data } }) => {
         console.log('error', data);
         if (data.errors) dispatch({ type: 'seterrors', payload: data.errors });
-        else dispatch({ type: 'setErrorMessage', payload: data.errorMessage });
+        else err = data.errorMessage;
       })
       .finally(() => {
-        dispatch({ type: 'setloading', payload: false });
+        if (callback) callback(err);
       });
   },
 };
@@ -53,7 +76,7 @@ const categories = [
 
 const projects = [
   {
-    title: 'Research to cure COVID 19 ',
+    title: 'Research to cure COVID 19',
     targetAmount: 1500,
     raisedAmount: 100,
     createdAt: '2 days ago',
@@ -97,7 +120,7 @@ const projects = [
 const returnsPeriods = ['Weekly', 'Monthly', 'Quarterly', 'Annualy'];
 
 const initialState = {
-  projects: [...projects, ...projects],
+  projects: projects,
   categories,
   returnsPeriods,
   loading: false,

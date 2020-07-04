@@ -1,6 +1,10 @@
 #ProjetDetail {
-  padding: 40px 150px;
-  background-color: #fdfdfd4d;
+  display: none;
+  /* padding: 40px 150px; */
+  /* background-color: #fdfdfd4d; */
+  background: url('../assets/images/create-project.jpg') center center no-repeat;
+  background-size: cover;
+  height: 500px;
 }
 
 #ProjetDetail #content {

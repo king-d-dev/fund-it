@@ -2,17 +2,16 @@ import React, { useContext } from 'react';
 
 import { Image, Grid, Divider } from 'semantic-ui-react';
 import Project from './Project';
-import { Context as authContext } from '../context/authContext';
-import { Context as projectsContext } from '../context/projectsContext';
+import { Context as AuthContext } from '../context/authContext';
+import { Context as ProjectsContext } from '../context/projectsContext';
 
-function ProfilePage() {
+function DashBoardPage() {
   const {
     state: { user },
-  } = useContext(authContext);
-
+  } = useContext(AuthContext);
   const {
-    state: { projects },
-  } = useContext(projectsContext);
+    state: { projects, getProjects },
+  } = useContext(ProjectsContext);
 
   return (
     <div style={styles.container}>
@@ -44,7 +43,7 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default DashBoardPage;
 
 const styles = {
   container: {

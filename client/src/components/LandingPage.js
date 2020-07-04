@@ -7,7 +7,7 @@ import Project from './Project';
 
 function LandingPage() {
   const {
-    state: { projects }
+    state: { projects, getProjects },
   } = useContext(ProjectContext);
 
   return (
@@ -50,11 +50,11 @@ const styles = {
     backgroundColor: '#0000007d',
     padding: 8,
     borderRadius: 5,
-    lineHeight: 1.3
+    lineHeight: 1.3,
   },
   featredProjectsHeader: {
     textAlign: 'center',
     fontSize: '35px',
-    marginBottom: 40
-  }
+    marginBottom: 40,
+  },
 };

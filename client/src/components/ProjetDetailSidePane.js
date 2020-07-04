@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Card, Feed, Progress, Button } from 'semantic-ui-react';
 
 const FeedItem = ({ imgSrc, createdAt, content }) => {
@@ -22,7 +21,7 @@ const imgSrc2 = require('../assets/images/user-2.png');
 
 const ProjectDetailSidePane = (props) => {
   let [randomColor, setRandomColor] = useState('purple');
-  const reactHistory = useHistory();
+  // const reactHistory = useHistory();
 
   function getRandomColor() {
     if (props.disableFundNow) return 'purple';

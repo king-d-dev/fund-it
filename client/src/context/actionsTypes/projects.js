@@ -1,0 +1,4 @@
+export const SET_PROJECTS = 'SET_PROJECTS';
+export const CREATE_PROJECT = 'CREATE_PROJECT';
+export const SET_ERRORS = 'SET_ERRORS';
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';

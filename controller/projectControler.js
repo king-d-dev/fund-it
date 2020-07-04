@@ -92,7 +92,7 @@ async function create_project(req, res) {
     await Project.create({
       ...req.body,
       _owner: req.user._id,
-      photo: imageName,
+      photo: imagePath,
     });
 
     const projects = await Project.find({ _owner: req.user._id });
@@ -102,6 +102,20 @@ async function create_project(req, res) {
   }
 }
 
+async function fetch_projects(req, res) {
+  let projects;
+  if (req.query.category) {
+    projects = await Project.find({ category: req.query.category });
+  } else if (req.query.search) {
+    projects = await Project.find({ $text: { $search: req.query.search } });
+  } else {
+    projects = await Project.find();
+  }
+
+  return res.status(200).json({ projects });
+}
+
 module.exports = {
   create_project,
+  fetch_projects,
 };
