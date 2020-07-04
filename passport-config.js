@@ -10,15 +10,12 @@ const jwtOptions = {
 };
 
 const jwtStrategy = new Strategy(jwtOptions, async function (payload, done) {
-  console.log(payload);
   try {
     const user = await User.findById(payload.sub, { password: false });
 
     if (!user) {
       return done(null, false);
     }
-    // make sure user's password is not mistakenly sent to the client
-    delete user.password;
     return done(null, user);
   } catch (error) {
     return done(error, false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, Feed, Progress, Button } from 'semantic-ui-react';
 
@@ -9,7 +9,7 @@ const FeedItem = ({ imgSrc, createdAt, content }) => {
       <Feed.Content>
         <Feed.Date content={createdAt} />
         <Feed.Summary>
-          <a> {content} </a>
+          <label style={{ color: '#4183c4' }}> {content} </label>
         </Feed.Summary>
       </Feed.Content>
     </Feed.Event>
@@ -20,7 +20,7 @@ const imgSrc = require('../images/user.jpg');
 const imgSrc1 = require('../images/user-1.png');
 const imgSrc2 = require('../images/user-2.png');
 
-const ProjectDetailSidePane = props => {
+const ProjectDetailSidePane = (props) => {
   let [randomColor, setRandomColor] = useState('purple');
   const reactHistory = useHistory();
 
@@ -31,15 +31,10 @@ const ProjectDetailSidePane = props => {
     return 'green yellow purple blue violet'.split(' ')[pos];
   }
 
-  const navigate = () =>
-    reactHistory.push({
-      pathname: '/projects/123/fund-now'
-    });
-
   randomColor = getRandomColor();
 
   useEffect(() => {
-    const handle = setInterval(function() {
+    const handle = setInterval(function () {
       setRandomColor(getRandomColor());
     }, 1000);
 
@@ -60,9 +55,21 @@ const ProjectDetailSidePane = props => {
           </Progress>
           <div className="ui two buttons" style={{ marginTop: 20 }}>
             <Button
+              title={
+                props.disableFundNow
+                  ? 'Only Investors are allowed to fund projects'
+                  : 'Fund Now'
+              }
               disabled={props.disableFundNow}
               color={randomColor}
-              onClick={navigate}
+              onClick={() => {
+                if (!props.currentUser) {
+                  alert('Please login to fund this project');
+                  return;
+                }
+
+                window.open('https://paystack.com/pay/fund-it', '_self');
+              }}
             >
               Fund Now
             </Button>

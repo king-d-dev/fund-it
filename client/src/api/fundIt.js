@@ -7,11 +7,16 @@ let url =
 
 const instance = axios.create({ baseURL: url });
 
-instance.interceptors.request.use(config => {
-  const token = window.localStorage.getItem('token');
+instance.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem('token');
 
-  if (token) config.headers.authenticate = token;
-  return config;
-});
+    if (token) config.headers.authenticate = token;
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 
 export default instance;

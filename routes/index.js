@@ -8,16 +8,9 @@ const axios = require('axios');
 const User = mongoose.model('User');
 const Investment = mongoose.model('Investment');
 const Project = mongoose.model('Project');
+const { create_project } = require('../controller/projectControler');
 
 const jwtSecret = process.env.JWT_SECRET;
-
-const PERIODS = ['Weekly', 'Monthly', 'Quarterly', 'Annually'];
-const CATEGORIES = [
-  'Engineering & Manufacturing',
-  'Science & Research',
-  'Social Development',
-  'Fashion & Design',
-];
 
 const generateToken = (user) =>
   jwt.encode({ sub: user._id, iat: Date.now() }, jwtSecret);
@@ -25,6 +18,7 @@ const generateToken = (user) =>
 const requireAuth = passport.authenticate('jwt', { session: false });
 
 async function PARAM_projectId(req, res, next, id) {
+  console.log('id', id);
   const project = await Project.findById(id);
   req.project = project;
 
@@ -79,14 +73,6 @@ async function create_user_account(req, res) {
     errors.email.push('this email is associated with an existing account');
   }
 
-  if (idNumber.length < 14) {
-    errors.idNumber.push('ID number must not be less than 14 characters long');
-  }
-
-  if (password.length < 8) {
-    errors.password.push('password must be 8 characters or more');
-  }
-
   if (password !== confirmPassword) {
     errors.password.push('passwords do not match');
   }
@@ -139,7 +125,9 @@ async function create_user_account(req, res) {
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).send('');
+    return res
+      .status(500)
+      .send('something went bad while processing your request');
   }
 }
 
@@ -151,12 +139,12 @@ async function login(req, res) {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return res.status(401).json({ errorMessage: 'wrong email or password' });
+    return res.status(401).json({ errorMessage: 'invalid email' });
   }
 
   const password_correct = await bcrypt.compare(password, user.password);
   if (!password_correct) {
-    return res.status(401).json({ errorMessage: 'wrong email or password' });
+    return res.status(401).json({ errorMessage: 'invalid password' });
   }
 
   const token = generateToken(user);
@@ -223,111 +211,6 @@ async function set_profile_photo(req, res) {
   }
 }
 
-async function create_project(req, res) {
-  const {
-    title,
-    description,
-    category,
-    BIN,
-    returnRate,
-    returnPeriod,
-    fundTarget,
-  } = req.body;
-
-  const errors = {
-    title: [],
-    description: [],
-    fundTarget: [],
-    category: [],
-    returnPeriod: [],
-    returnRate: [],
-    BIN: [],
-    photo: [],
-  };
-
-  if (!(BIN && BIN.trim())) {
-    errors.BIN.push('please provide a valid BIN');
-  }
-
-  if (!returnPeriod || PERIODS.indexOf(returnPeriod) == -1) {
-    errors.returnPeriod.push('please select a valid returns period');
-  }
-
-  if (!category || CATEGORIES.indexOf(category) == -1) {
-    errors.category.push('please select a valid returns period');
-  }
-
-  if (!(title && title.trim())) {
-    errors.title.push('title is required');
-  }
-
-  if (description && description.trim()) {
-    if (description.trim().length > 256) {
-      errors.description.push(
-        'description cannot be longer than 256 characters'
-      );
-    }
-  }
-
-  if (!(fundTarget && fundTarget.trim())) {
-    errors.fundTarget.push('fund target field required');
-  } else {
-    if (isNaN(fundTarget.trim())) {
-      errors.fundTarget.push('invalid value for fund target');
-    }
-  }
-
-  if (returnRate && returnRate.trim()) {
-    if (isNaN(returnRate)) {
-      errors.returnRate.push('invalid value for discount');
-    }
-  } else errors.returnRate.push('please enter the return rate');
-
-  if (!req.files || !req.files.photo || !req.files.photo.name) {
-    errors.photo.push('Please upload a profile photo');
-  }
-
-  const error_count = Object.keys(errors).reduce(
-    (total, key) => errors[key].length + total,
-    0
-  );
-
-  if (error_count) {
-    return res.status(401).json({ errors });
-  }
-
-  let image_path = '';
-  if (req.files && req.files.photo) {
-    const store = path.resolve(__dirname, '..', 'store');
-    image_path = path.join(
-      store,
-      String(Date.now()),
-      '.' + path.extname(req.files.photo.name)
-    );
-
-    if (!fs.existsSync(store)) {
-      fs.mkdirSync(store);
-    }
-
-    req.files.photo.mv(image_path, async (error) => {
-      if (error) return res.status(500).send(error.message);
-    });
-  }
-
-  Project.create({
-    ...req.body,
-    _owner: req.user._id,
-    photo: image_path,
-  });
-
-  let user = req.user;
-  delete user.password;
-
-  const projects = await Project.find({ _owner: req.user._id });
-  return res.json({ success: true, projects, user });
-  // return res.status(401).json({errorMessage: error.toString()})
-}
-
 async function fetch_projects(req, res) {
   let projects;
   if (req.query.category) {
@@ -378,6 +261,11 @@ async function invest(req, res) {
   });
 }
 
+const {
+  verifyTransaction,
+  createProjectInvestment,
+} = require('../controller/paymentController');
+
 module.exports = (app) => {
   app.post('/api/register', create_user_account);
   app.post('/api/login', login);
@@ -386,7 +274,7 @@ module.exports = (app) => {
   app.get('/api/projects', fetch_projects);
   app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
   app.post('/api/create-project', requireAuth, create_project);
-  app.post('/api/projects/:projectId/invest', PARAM_projectId, invest);
-
-  //Testing the Rave API
+  // app.post('/api/project/payment-intent', requireAuth, initiatePaymentProcess);
+  app.get('/api/verify-transaction', verifyTransaction);
+  app.get('/api/projects/:projectId/invest', createProjectInvestment);
 };

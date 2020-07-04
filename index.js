@@ -29,7 +29,6 @@ app.use(express.static('public'));
 require('./models');
 require('./passport-config');
 require('./routes')(app);
-// require('./controller/paymentHandler')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, 'client', 'build')));
@@ -43,4 +42,7 @@ const PORT = process.env.PORT || 3005;
 http
   .createServer(app)
   .listen(PORT)
-  .on('listening', () => console.log(`Server running on PORT ${PORT}`));
+  .on('listening', () => {
+    // console.clear();
+    console.log(`Server running on PORT ${PORT}`);
+  });

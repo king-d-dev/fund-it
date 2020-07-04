@@ -1,5 +1,6 @@
 import React from 'react';
 
+import 'sweetalert/dist/sweetalert.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { Provider as AuthProvider } from './context/authContext';

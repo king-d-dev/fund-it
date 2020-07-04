@@ -1,23 +1,29 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const {
+  userTypes,
+  returnPeriods,
+  projectCategories,
+  idTypes,
+} = require('../enums');
 
 const { Schema } = mongoose;
 const UserSchema = new Schema({
   fullName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     trim: true,
-    unique: true
+    unique: true,
   },
   password: { type: String, required: true },
   phoneNumber: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   bio: String,
   photo: String,
@@ -25,9 +31,9 @@ const UserSchema = new Schema({
   idType: {
     type: String,
     required: true,
-    enum: ["Voters", "NHIS", "National ID"]
+    enum: idTypes,
   },
-  userType: { type: String, required: true, enum: ["solicitor", "investor"] }
+  userType: { type: String, required: true, enum: userTypes },
 });
 
 const ProjectSchema = new Schema(
@@ -35,21 +41,16 @@ const ProjectSchema = new Schema(
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     description: String,
     _owner: {
       type: Schema.Types.ObjectId,
-      ref: "User"
+      ref: 'User',
     },
     category: {
       type: String,
-      enum: [
-        "Engineering & Manufacturing",
-        "Science & Research",
-        "Social Development",
-        "Fashion & Design"
-      ]
+      enum: projectCategories,
     },
     fundTarget: { type: Number, required: true },
     amountRaised: { type: Number, default: 0.0 },
@@ -57,26 +58,25 @@ const ProjectSchema = new Schema(
     returnRate: { type: Number, required: true },
     returnPeriod: {
       type: String,
-      enum: ["Weekly", "Monthly", "Quarterly", "Annualy"],
-      default: "Monthly"
+      enum: returnPeriods,
+      default: 'Monthly',
     },
-    photo: String
+    photo: String,
   },
   { timestamps: true }
 );
 
-ProjectSchema.index({ title: "text", description: "text", category: "text" });
+ProjectSchema.index({ title: 'text', description: 'text', category: 'text' });
 
 const InvestmentSchema = new Schema(
   {
-    _investor: { type: Schema.Types.ObjectId, ref: "Investor" },
-    _project: { type: Schema.Types.ObjectId, ref: "Project" },
-    amount: { type: Number, required: true, trim: true }
+    _investor: { type: Schema.Types.ObjectId, ref: 'Investor' },
+    _project: { type: Schema.Types.ObjectId, ref: 'Project' },
+    transactionDetails: { type: Object, required: true },
   },
   { timestamps: true }
 );
 
-mongoose.model("User", UserSchema);
-mongoose.model("Project", ProjectSchema);
-mongoose.model("Investment", InvestmentSchema);
-module.exports = {};
+mongoose.model('User', UserSchema);
+mongoose.model('Project', ProjectSchema);
+mongoose.model('Investment', InvestmentSchema);

@@ -1,6 +1,5 @@
 import React, { useReducer, useContext } from 'react';
 import { Context as projectsContext } from '../context/projectsContext';
-import ReactFilestack from 'filestack-react';
 
 import {
   Form,

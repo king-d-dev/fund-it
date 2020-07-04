@@ -35,7 +35,8 @@ const actions = {
       })
       .catch(({ response: { data } }) => {
         console.log('error', data);
-        dispatch({ type: 'seterrors', payload: data.errors });
+        if (data.errors) dispatch({ type: 'seterrors', payload: data.errors });
+        else dispatch({ type: 'setErrorMessage', payload: data.errorMessage });
       })
       .finally(() => {
         dispatch({ type: 'setloading', payload: false });
