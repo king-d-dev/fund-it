@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Image, Grid, Divider } from 'semantic-ui-react';
 import Project from './Project';
@@ -10,8 +10,13 @@ function DashBoardPage() {
     state: { user },
   } = useContext(AuthContext);
   const {
-    state: { projects, getProjects },
+    state: { projects },
+    getProjects,
   } = useContext(ProjectsContext);
+
+  useEffect(() => {
+    getProjects(null, (error) => {});
+  });
 
   return (
     <div style={styles.container}>
