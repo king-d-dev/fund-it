@@ -94,6 +94,7 @@ function CreateProjectPage() {
     <>
       <SweetAlert
         show={!!errorMessage}
+        type="error"
         title="Error"
         text={errorMessage}
         onConfirm={() => setErrorMessage('')}
