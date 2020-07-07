@@ -37,8 +37,6 @@ function ProjectsPage() {
   useEffect(() => {
     if (filters.length)
       setLocalProjects(projects.filter((i) => filters.includes(i.category)));
-
-    console.log(projects);
   }, [filters, projects]);
 
   const sortProjects = (key) => {
@@ -57,7 +55,7 @@ function ProjectsPage() {
   };
 
   return (
-    <>
+    <React.Fragment>
       <SweetAlert
         show={!!errorMessage}
         type="error"
@@ -67,13 +65,7 @@ function ProjectsPage() {
       />
 
       <div id="ProjectsPage" css={styles.container}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            padding: 25,
-          }}
-        >
+        <div css={styles.headContainer}>
           <SearchBar />
           <span style={{ marginRight: 50 }} />
           <Select
@@ -95,7 +87,7 @@ function ProjectsPage() {
               ))}
             </div>
           </div>
-          <div className="projects">
+          <div className="projects" css={styles.projects}>
             <Grid>
               <Grid.Row columns={3}>
                 {localProjects.map((proj, i) => (
@@ -108,7 +100,7 @@ function ProjectsPage() {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 
@@ -116,18 +108,28 @@ export default ProjectsPage;
 
 const styles = {
   container: css`
+    padding: 20px 20px;
     background-color: #fdfdfd4d;
     display: flex;
     flex-direction: column;
   `,
   projectsWrapper: css`
     display: flex;
-    flex: 2px;
     margin-top: 20px;
-    justify-content: center;
   `,
   filtersContainer: css`
-    width: 600px;
     padding: 20px;
+    border-right: 1px solid #eee;
+    height: calc(100vh - 200px);
+  `,
+  headContainer: css`
+    display: flex;
+    justify-content: center;
+    padding: 25;
+  `,
+  projects: css`
+    flex-grow: 2;
+    padding-left: 20px;
+    /* background-color: red; */
   `,
 };

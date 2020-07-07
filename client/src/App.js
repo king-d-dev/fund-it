@@ -16,6 +16,7 @@ import CreateProjectPage from './components/CreateProjectPage';
 import SignOutPage from './components/SignOutPage';
 import DashBoardPage from './components/DashBoardPage';
 import SettingsPage from './components/SettingsPage';
+import ManageProjectPage from './Pages/ManageProjectPage';
 
 import './styles/App.css';
 
@@ -34,6 +35,10 @@ function App() {
 
               <Route path="/dashboard">
                 <DashBoardPage />
+              </Route>
+
+              <Route path="/me/manage-project/:projectId">
+                <ManageProjectPage />
               </Route>
 
               <Route path="/settings">

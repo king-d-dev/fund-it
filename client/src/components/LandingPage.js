@@ -34,7 +34,7 @@ function LandingPage() {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <SweetAlert
         show={!!error}
         type="error"
@@ -76,7 +76,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 

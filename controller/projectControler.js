@@ -120,7 +120,6 @@ async function fetch_projects(req, res) {
 
 async function featuredProjects(req, res) {
   const projects = await Project.aggregate([{ $sample: { size: 10 } }]);
-  console.log(projects);
 
   return res.status(200).json({ data: projects });
 }

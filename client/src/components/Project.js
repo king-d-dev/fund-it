@@ -36,32 +36,52 @@ function Project({ data }) {
             <Card.Description>{data.desscription}</Card.Description>
           </Card.Content>
           <Card.Content extra>
-            <div className="ui two buttons">
-              <Button
-                basic
-                color="green"
-                disabled={disableFundNow()}
-                onClick={() => {
-                  if (!authState.user) {
-                    alert('Please login to fund this project');
-                    return;
+            {data._owner === authState.user?._id ? (
+              <div className="ui two buttons">
+                <Button
+                  basic
+                  color="green"
+                  onClick={() =>
+                    reactHistory.push({
+                      pathname: '/me/manage-project/' + data._id,
+                      state: data,
+                    })
                   }
+                >
+                  View
+                </Button>
+              </div>
+            ) : (
+              <div className="ui two buttons">
+                <Button
+                  basic
+                  color="green"
+                  disabled={disableFundNow()}
+                  onClick={() => {
+                    if (!authState.user) {
+                      alert('Please login to fund this project');
+                      return;
+                    }
 
-                  window.open('https://paystack.com/pay/fund-it', '_self');
-                }}
-              >
-                Fund Now
-              </Button>
-              <Button
-                basic
-                color="blue"
-                onClick={() =>
-                  reactHistory.push({ pathname: '/projects/123', state: data })
-                }
-              >
-                View
-              </Button>
-            </div>
+                    window.open('https://paystack.com/pay/fund-it', '_self');
+                  }}
+                >
+                  Fund Now
+                </Button>
+                <Button
+                  basic
+                  color="blue"
+                  onClick={() =>
+                    reactHistory.push({
+                      pathname: '/projects/123',
+                      state: data,
+                    })
+                  }
+                >
+                  View
+                </Button>
+              </div>
+            )}
           </Card.Content>
         </Card>
       </div>

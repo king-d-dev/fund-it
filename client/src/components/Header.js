@@ -60,7 +60,7 @@ function Header() {
             Signed in as <strong> {authState.user.fullName} </strong>
           </span>
         ),
-        disabled: true,
+        disabled: false,
       };
 
       const trigger = (

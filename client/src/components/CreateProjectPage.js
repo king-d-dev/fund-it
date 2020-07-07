@@ -91,7 +91,7 @@ function CreateProjectPage() {
   };
 
   return (
-    <>
+    <React.Fragment>
       <SweetAlert
         show={!!errorMessage}
         type="error"
@@ -212,7 +212,7 @@ function CreateProjectPage() {
           </Form.Field>
         </Form>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 
