@@ -13,7 +13,6 @@ function ProjectDetailPage(props) {
 
   useEffect(() => {
     const params = new URL(document.location).searchParams;
-    console.log('params', params);
     const reference = params.get('reference');
     console.log('ref', reference);
 
@@ -50,13 +49,13 @@ function ProjectDetailPage(props) {
           <img
             className="project-img"
             alt="this is something nice"
-            src={state.imgSrc}
+            src={state.photo}
           />
           {/* <div className="solicitor-info"></div> */}
           <div className="wrapper">
             <div className="meta-info">
               <span style={{ marginRight: 10 }}>
-                <strong>Created By</strong>
+                <strong>By</strong>
               </span>
               <Image src={require('../assets/images/user.jpg')} avatar />
               <span
@@ -65,7 +64,8 @@ function ProjectDetailPage(props) {
                 Steven Grider
               </span>
               <label className="created-at" style={{ paddingLeft: 15 }}>
-                <span> {state.createdAt} </span>
+                <strong> Created:</strong>{' '}
+                <span> {new Date(state.createdAt).toDateString()} </span>
               </label>
               <label className="category">
                 <strong> Category:</strong> <span> {state.category} </span>

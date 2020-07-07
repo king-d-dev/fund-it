@@ -8,6 +8,7 @@ import RegisterPage from './RegisterPage';
 import '../styles/Header.css';
 
 let history;
+window.headerHeight = '60px';
 
 const options = [
   {

@@ -12,9 +12,11 @@ const Project = mongoose.model('Project');
 const {
   create_project,
   fetch_projects,
+  featuredProjects,
+  getUserProjects,
 } = require('../controller/projectControler');
 const {
-  verifyTransaction,
+  fundNow,
   createProjectInvestment,
 } = require('../controller/paymentController');
 
@@ -228,9 +230,12 @@ module.exports = (app) => {
   app.post('/api/login', login);
   app.post('/api/edit-profile/', requireAuth, edit_profile);
   app.post('/api/set-profile-photo/', requireAuth, set_profile_photo);
-  app.get('/api/projects', fetch_projects);
-  app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
   app.post('/api/create-project', requireAuth, create_project);
-  app.get('/api/verify-transaction', verifyTransaction);
+
+  app.get('/api/projects', fetch_projects);
+  app.get('/api/featured-projects', featuredProjects);
+  app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
+  app.post('/api/projects/:projectId/fund-now', fundNow);
   app.get('/api/projects/:projectId/invest', createProjectInvestment);
+  app.get('/api/user/:userId/projects', requireAuth, getUserProjects);
 };

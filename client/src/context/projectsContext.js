@@ -29,10 +29,27 @@ const actions = {
     fundItApi
       .get('/projects', { params: filters })
       .then(({ data }) => {
-        dispatch({ type: SET_PROJECTS, payload: data.projects });
+        // console.log(data);
+        dispatch({ type: SET_PROJECTS, payload: data.data });
       })
       .catch((error) => {
         err = error;
+      })
+      .finally(() => {
+        if (callback) callback(err);
+      });
+  },
+
+  getUserProjects: (dispatch) => (userId, callback) => {
+    let err;
+
+    fundItApi
+      .get(`/user/${userId}/projects`)
+      .then(({ data }) => {
+        dispatch({ type: SET_PROJECTS, payload: data.projects });
+      })
+      .catch((error) => {
+        err = error?.response?.data;
       })
       .finally(() => {
         if (callback) callback(err);
@@ -54,12 +71,15 @@ const actions = {
       .post('/create-project', formData)
       .then(({ data }) => {
         console.log('done with', data);
-        dispatch({ type: 'createProject', payload: data.projects });
+        // dispatch({ type: 'createProject', payload: data.projects });
       })
-      .catch(({ response: { data } }) => {
-        console.log('error', data);
-        if (data.errors) dispatch({ type: 'seterrors', payload: data.errors });
-        else err = data.errorMessage;
+      .catch((error) => {
+        if (error.response.data.errors)
+          dispatch({
+            type: 'seterrors',
+            payload: error.response.data.errors,
+          });
+        else err = error.response.data.errorMessage;
       })
       .finally(() => {
         if (callback) callback(err);
@@ -74,48 +94,7 @@ const categories = [
   'Fashion & Design',
 ];
 
-const projects = [
-  {
-    title: 'Research to cure COVID 19',
-    targetAmount: 1500,
-    raisedAmount: 100,
-    createdAt: '2 days ago',
-    category: categories[0],
-    imgSrc: require('../assets/images/science-project.jpg'),
-    description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  },
-  {
-    title: 'Locally manufactured car engine',
-    targetAmount: 1500,
-    raisedAmount: 100,
-    createdAt: '13 days ago',
-    category: categories[1],
-    imgSrc: require('../assets/images/engineering-proj.jpg'),
-    description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  },
-  {
-    title: 'Home made Shirts',
-    targetAmount: 8000,
-    raisedAmount: 200,
-    createdAt: '1 days ago',
-    category: categories[2],
-    imgSrc: require('../assets/images/clothing.jpg'),
-    description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  },
-  {
-    title: 'A fight against Poverty',
-    targetAmount: 3000,
-    raisedAmount: 20,
-    createdAt: '10 days ago',
-    category: categories[3],
-    imgSrc: require('../assets/images/social-proj.jpg'),
-    description:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  },
-];
+const projects = [];
 
 const returnsPeriods = ['Weekly', 'Monthly', 'Quarterly', 'Annualy'];
 

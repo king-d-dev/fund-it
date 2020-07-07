@@ -99,6 +99,7 @@ function CreateProjectPage() {
         text={errorMessage}
         onConfirm={() => setErrorMessage('')}
       />
+
       <div id="CreateProjectPage">
         <Header as="h2" style={{ marginBottom: 40 }}>
           Create a new Project
@@ -186,6 +187,7 @@ function CreateProjectPage() {
             control={Input}
             name="photo"
             type="file"
+            id="photo"
             accept="image/*"
             {...showErrorProp('photo')}
           />

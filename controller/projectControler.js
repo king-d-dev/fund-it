@@ -1,7 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
+const axios = require('axios');
+const FormData = require('form-data');
 const Project = mongoose.model('Project');
+const Investment = mongoose.model('Investment');
 const { projectCategories, returnPeriods } = require('../enums');
 
 async function create_project(req, res) {
@@ -73,30 +76,29 @@ async function create_project(req, res) {
     return res.status(401).json({ errors });
   }
 
-  let imagePath = '';
-  const imageName = Date.now().toString() + path.extname(req.files.photo.name);
-  if (req.files && req.files.photo) {
-    const store = path.resolve(__dirname, '..', 'store');
-    imagePath = path.join(store, imageName);
+  const formData = new FormData();
+  formData.append('image', req.files.photo.data);
 
-    if (!fs.existsSync(store)) {
-      fs.mkdirSync(store);
-    }
-
-    req.files.photo.mv(imagePath, async (error) => {
-      if (error) res.status(500).json({ errorMessage: error.message });
-    });
-  }
+  const config = {
+    method: 'post',
+    url: 'https://api.imgur.com/3/image',
+    headers: {
+      Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+      ...formData.getHeaders(),
+    },
+    data: formData,
+  };
 
   try {
-    await Project.create({
+    const { data } = await axios(config);
+
+    const createdProject = await Project.create({
       ...req.body,
       _owner: req.user._id,
-      photo: imagePath,
+      photo: data.data.link,
     });
 
-    const projects = await Project.find({ _owner: req.user._id });
-    return res.json({ success: true, projects, user: req.user });
+    return res.json({ success: true, data: createdProject });
   } catch (error) {
     return res.status(500).json({ errorMessage: error.message });
   }
@@ -104,6 +106,7 @@ async function create_project(req, res) {
 
 async function fetch_projects(req, res) {
   let projects;
+
   if (req.query.category) {
     projects = await Project.find({ category: req.query.category });
   } else if (req.query.search) {
@@ -112,10 +115,28 @@ async function fetch_projects(req, res) {
     projects = await Project.find();
   }
 
-  return res.status(200).json({ projects });
+  return res.status(200).json({ data: projects });
+}
+
+async function featuredProjects(req, res) {
+  const projects = await Project.aggregate([{ $sample: { size: 10 } }]);
+  console.log(projects);
+
+  return res.status(200).json({ data: projects });
+}
+
+async function getUserProjects(req, res) {
+  try {
+    const projects = await Project.find({ _owner: req.params.userId });
+    return res.json({ data: projects });
+  } catch (error) {
+    return res.status(404).json({ data: { error: error.message } });
+  }
 }
 
 module.exports = {
   create_project,
   fetch_projects,
+  getUserProjects,
+  featuredProjects,
 };

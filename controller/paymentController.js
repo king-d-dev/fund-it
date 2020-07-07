@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const Investment = mongoose.model('Investment');
+const Project = mongoose.model('Project');
 const paystack = require('paystack')(process.env.PAY_STACK_SECRET_KEY);
 
-function verifyTransaction(req, res) {
+function fundNow(req, res) {
   const transactionReference = req.query.reference;
 
   if (!transactionReference)
@@ -12,7 +13,19 @@ function verifyTransaction(req, res) {
 
   paystack.transaction
     .get(transactionReference)
-    .then((res) => {
+    .then(async ({ data }) => {
+      await Promise.all([
+        Investment.create({
+          _investor: req.user._id,
+          _project: req.params.projectId,
+          transactionDetails: data.data,
+        }),
+        Project.updateOne(
+          { _id: req.params.projectId },
+          { $inc: { amountRaised: data.data.amount } }
+        ),
+      ]);
+
       return res.send('ok');
     })
     .catch((error) => {
@@ -25,4 +38,4 @@ function verifyTransaction(req, res) {
 
 function createProjectInvestment(req, res) {}
 
-module.exports = { verifyTransaction, createProjectInvestment };
+module.exports = { fundNow, createProjectInvestment };

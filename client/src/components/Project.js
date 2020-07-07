@@ -17,20 +17,19 @@ function Project({ data }) {
     <div className="Project" style={{ marginBottom: 40 }}>
       <div className="featured-projects">
         <Card>
-          <Image src={data.imgSrc} wrapped ui={false} />
+          <Image src={data.photo} wrapped ui={false} />
           <Card.Content>
             <Card.Header>{data.title}</Card.Header>
             <Card.Meta>
               <span className="target">
-                Amount Raised: GH₵{data.raisedAmount}
+                Amount Raised: GH₵{data.amountRaised}
               </span>
             </Card.Meta>
             <span className="target">
-              Target{' '}
+              Target:{' '}
               <strong>
                 <span style={{ color: '#5fc9f8', fontSize: 16 }}>
-                  {' '}
-                  GH₵{data.targetAmount}{' '}
+                  GH₵ {data.fundTarget}
                 </span>
               </strong>
             </span>
@@ -42,12 +41,14 @@ function Project({ data }) {
                 basic
                 color="green"
                 disabled={disableFundNow()}
-                onClick={() =>
-                  reactHistory.push({
-                    pathname: '/projects/123/fund-now',
-                    state: data
-                  })
-                }
+                onClick={() => {
+                  if (!authState.user) {
+                    alert('Please login to fund this project');
+                    return;
+                  }
+
+                  window.open('https://paystack.com/pay/fund-it', '_self');
+                }}
               >
                 Fund Now
               </Button>

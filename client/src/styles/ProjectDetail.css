@@ -1,9 +1,6 @@
 #ProjetDetail {
-  display: none;
-  /* padding: 40px 150px; */
-  /* background-color: #fdfdfd4d; */
-  background: url('../assets/images/create-project.jpg') center center no-repeat;
-  background-size: cover;
+  padding: 40px 150px;
+  background-color: #fdfdfd4d;
   height: 500px;
 }
 
