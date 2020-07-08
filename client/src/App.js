@@ -49,9 +49,9 @@ function App() {
                 <CreateProjectPage />
               </Route>
 
-              <Route path="/projects/:projectId/fund-now">
+              {/* <Route path="/projects/:projectId/fund-now">
                 <div>Hello world</div>
-              </Route>
+              </Route> */}
 
               <Route path="/projects/:projectId">
                 <ProjectDetailPage />

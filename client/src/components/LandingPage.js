@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Image } from 'semantic-ui-react';
 import SweetAlert from 'sweetalert-react';
-import { Context as ProjectContext } from '../context/projectsContext';
 import Project from './Project';
 import fundItApi from '../api/fundIt';
 import '../styles/LandingPage.css';
@@ -61,18 +60,32 @@ function LandingPage() {
             <h2 style={styles.featredProjectsHeader}>Featured Projects</h2>
 
             {data ? (
-              <Grid>
-                <Grid.Row columns={3}>
-                  {data.map((proj, i) => (
-                    <Grid.Column key={i.toString()}>
-                      <Project data={proj} />
-                    </Grid.Column>
-                  ))}
-                </Grid.Row>
-              </Grid>
-            ) : (
-              <h3>loading...</h3>
-            )}
+              <React.Fragment>
+                {data.length === 0 ? (
+                  <div style={{ marginLeft: 300 }}>
+                    <Image
+                      size="large"
+                      src={require('../assets/images/empty.png')}
+                    />
+                    <h3 style={{ marginLeft: 150 }}>
+                      Nothing here at the moment
+                    </h3>
+                  </div>
+                ) : null}
+
+                <Grid>
+                  <Grid.Row columns={3}>
+                    {data.map((proj, i) => (
+                      <Grid.Column key={i.toString()}>
+                        <Project data={proj} />
+                      </Grid.Column>
+                    ))}
+                  </Grid.Row>
+                </Grid>
+              </React.Fragment>
+            ) : null}
+
+            {loading ? <h3>loading...</h3> : null}
           </div>
         </div>
       </div>

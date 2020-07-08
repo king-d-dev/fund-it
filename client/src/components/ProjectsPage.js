@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import SweetAlert from 'sweetalert-react';
-import { Grid, Select, Checkbox } from 'semantic-ui-react';
+import { Grid, Select, Checkbox, Image } from 'semantic-ui-react';
 import { Context as ProjectContext } from '../context/projectsContext';
+import fundItApi from '../api/fundIt';
 import SearchBar from './SearchBar';
 import Project from './Project';
 import '../styles/ProjectsPage.css';
@@ -17,12 +18,36 @@ const sortOptions = [
 
 function ProjectsPage() {
   const {
-    state: { projects, categories },
+    state: { projects, categories, loading },
     getProjects,
   } = useContext(ProjectContext);
   const [errorMessage, setErrorMessage] = useState('');
   const [filters, setFilters] = useState([]);
   const [localProjects, setLocalProjects] = useState(projects);
+
+  // useEffect(() => {
+  //   const params = new URL(document.location).searchParams;
+  //   const reference = params.get('reference');
+  //   console.log('ref', reference);
+
+  //   if (reference) {
+  //     fundItApi
+  //       .get('/verify-transaction')
+  //       .then((res) => {
+  //         createProjectInvestment();
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // }, []);
+
+  // function createProjectInvestment() {
+  //   fundItApi
+  //     .post(`projects/${state._id}/invest`)
+  //     .then((res) => {})
+  //     .catch((error) => {});
+  // }
 
   useEffect(() => {
     getProjects(null, (error) => {
@@ -88,6 +113,10 @@ function ProjectsPage() {
             </div>
           </div>
           <div className="projects" css={styles.projects}>
+            {projects.length === 0 ? (
+              <Image size="large" src={require('../assets/images/empty.png')} />
+            ) : null}
+
             <Grid>
               <Grid.Row columns={3}>
                 {localProjects.map((proj, i) => (
@@ -97,6 +126,8 @@ function ProjectsPage() {
                 ))}
               </Grid.Row>
             </Grid>
+
+            {/* {loading ? <h3>loading...</h3> : null} */}
           </div>
         </div>
       </div>

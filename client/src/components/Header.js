@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Dropdown, Image, Icon } from 'semantic-ui-react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { Context as authContext } from '../context/authContext';
@@ -7,10 +7,14 @@ import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 import '../styles/Header.css';
 
+import { css, jsx } from '@emotion/core';
+// this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
+/** @jsx jsx */
+
 let history;
 window.headerHeight = '60px';
 
-const options = [
+let options = [
   {
     key: 'dashboard',
     text: 'Dashboard',
@@ -25,13 +29,13 @@ const options = [
     value: 'create project',
     route: '/create-project',
   },
-  {
-    key: 'settings',
-    text: 'Settings',
-    icon: 'settings',
-    value: 'settings',
-    route: '/settings',
-  },
+  // {
+  //   key: 'settings',
+  //   text: 'Settings',
+  //   icon: 'settings',
+  //   value: 'settings',
+  //   route: '/settings',
+  // },
   {
     key: 'sign-out',
     text: 'Sign Out',
@@ -48,8 +52,16 @@ const handleClick = (e, data) => {
 };
 
 function Header() {
+  const [optionsState, setOptionsState] = useState(options);
   const { state: authState } = useContext(authContext);
   history = useHistory();
+
+  useEffect(() => {
+    if (authState.user?.userType === 'investor') {
+      let o = options.filter((i) => i.key !== 'create project');
+      setOptionsState(o);
+    }
+  }, [options, authState.user]);
 
   const renderAuthStatus = () => {
     if (authState.token) {
@@ -75,7 +87,7 @@ function Header() {
           <Dropdown
             onChange={handleClick}
             trigger={trigger}
-            options={[defaultOption, ...options]}
+            options={[defaultOption, ...optionsState]}
             pointing="top left"
             icon={<Icon name="dropdown" />}
           />
@@ -97,7 +109,14 @@ function Header() {
   return (
     <div id="Header">
       <Link id="logo" to="/" style={{ color: '#000' }}>
-        <h3>Fund it</h3>
+        {/* <h3>Fund it</h3> */}
+        <Image
+          css={css`
+            height: 60px;
+            width: 60px;
+          `}
+          src={require('../assets/images/logo.jpeg')}
+        />
       </Link>
       <div className="navs">
         <div className="nav-item">
@@ -110,7 +129,7 @@ function Header() {
             Projects
           </NavLink>
         </div>
-        <div className="nav-item">
+        {/* <div className="nav-item">
           <NavLink to="/about-us" exact>
             About Us
           </NavLink>
@@ -119,7 +138,7 @@ function Header() {
           <NavLink to="contact-us" exact>
             Contact Us
           </NavLink>
-        </div>
+        </div> */}
 
         {renderAuthStatus()}
       </div>

@@ -3,37 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { Container, Header, Divider, Image } from 'semantic-ui-react';
 import { Context as authContext } from '../context/authContext';
 import ProjetDetailSidePane from './ProjetDetailSidePane';
-import fundItApi from '../api/fundIt';
 
 import '../styles/ProjectDetail.css';
 
 function ProjectDetailPage(props) {
   const { state } = useLocation();
   const { state: authState } = useContext(authContext);
-
-  useEffect(() => {
-    const params = new URL(document.location).searchParams;
-    const reference = params.get('reference');
-    console.log('ref', reference);
-
-    if (reference) {
-      fundItApi
-        .get('/verify-transaction')
-        .then((res) => {
-          createProjectInvestment();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, []);
-
-  function createProjectInvestment() {
-    fundItApi
-      .post(`projects/${state._id}/invest`)
-      .then((res) => {})
-      .catch((error) => {});
-  }
 
   const disableFundNow = () => {
     if (authState.user) return authState.user.userType === 'solicitor';

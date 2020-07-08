@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Image } from 'semantic-ui-react';
 import SweetAlert from 'sweetalert-react';
 import fundItApi from '../api/fundIt';
 
@@ -25,19 +25,22 @@ function DashBoardPage() {
     fundItApi
       .get(`/user/${user._id}/projects`)
       .then(({ data }) => {
-        // dispatch({ type: SET_PROJECTS, payload: data.projects });
         setProjects(data.data);
       })
       .catch(({ response }) => {
-        console.log(response.data);
-        setErrorMessage(
-          response?.data.data.error || 'something went wrong fetching the data'
-        );
+        if (typeof response.data === 'string') setErrorMessage(response.data);
+        else
+          setErrorMessage(
+            response?.data.data.error ||
+              'something went wrong fetching the data'
+          );
       })
       .finally(() => {
         setLoadingTo(false);
       });
   }, []);
+
+  console.log(projects);
 
   return (
     <DashBoardLayout>
@@ -53,18 +56,27 @@ function DashBoardPage() {
         <h2>My Projects</h2>
         <div className="projects">
           {projects ? (
-            <Grid>
-              <Grid.Row columns={2}>
-                {projects.map((proj, i) => (
-                  <Grid.Column key={i.toString()}>
-                    <Project data={proj} />
-                  </Grid.Column>
-                ))}
-              </Grid.Row>
-            </Grid>
-          ) : (
-            <h3>loading...</h3>
-          )}
+            <React.Fragment>
+              {projects.length === 0 ? (
+                <Image
+                  size="large"
+                  src={require('../assets/images/empty.png')}
+                />
+              ) : null}
+
+              <Grid>
+                <Grid.Row columns={2}>
+                  {projects.map((proj, i) => (
+                    <Grid.Column key={i.toString()}>
+                      <Project data={proj} />
+                    </Grid.Column>
+                  ))}
+                </Grid.Row>
+              </Grid>
+            </React.Fragment>
+          ) : null}
+
+          {loading ? <h3>loading...</h3> : null}
         </div>
       </div>
     </DashBoardLayout>
@@ -76,6 +88,7 @@ export default DashBoardPage;
 const styles = {
   projectsContainer: css`
     padding: 20px;
+    width: 100%;
     padding-left: 80px;
   `,
   projects: css`
