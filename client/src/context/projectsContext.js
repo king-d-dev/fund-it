@@ -56,6 +56,22 @@ const actions = {
       });
   },
 
+  getProjectInvestors: (dispatch) => (projectId, callback) => {
+    let err;
+
+    fundItApi
+      .get(`/projects/${projectId}/investors`)
+      .then(({ data }) => {
+        callback(null, data);
+      })
+      .catch((error) => {
+        err = String(error);
+      })
+      .finally(() => {
+        if (callback) callback(err);
+      });
+  },
+
   createProject: (dispatch) => (payload, callback) => {
     let err;
     dispatch({ type: 'setloading', payload: true });

@@ -14,6 +14,8 @@ const {
   fetch_projects,
   featuredProjects,
   getUserProjects,
+  getProjectInvestors,
+  getMyInvestments,
 } = require('../controller/projectControler');
 const {
   fundNow,
@@ -233,9 +235,11 @@ module.exports = (app) => {
   app.post('/api/create-project', requireAuth, create_project);
 
   app.get('/api/projects', fetch_projects);
+  app.get('/api/projects/:projectId/investors', getProjectInvestors);
   app.get('/api/featured-projects', featuredProjects);
   app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
   app.post('/api/projects/:projectId/fund-now', fundNow);
+  app.get('/api/me/investments', getMyInvestments);
   app.get('/api/projects/:projectId/invest', createProjectInvestment);
   app.get('/api/user/:userId/projects', requireAuth, getUserProjects);
 };

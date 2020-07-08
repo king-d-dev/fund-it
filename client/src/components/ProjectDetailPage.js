@@ -17,7 +17,7 @@ function ProjectDetailPage(props) {
   };
 
   return (
-    <div id="ProjetDetail">
+    <div id="ProjetDetail" style={{ marginBottom: 300 }}>
       <h2> {state.title} </h2>
       <div id="content">
         <div id="left-pane">
@@ -36,7 +36,7 @@ function ProjectDetailPage(props) {
               <span
                 style={{ borderRight: '2px solid #dadada', paddingRight: 15 }}
               >
-                Steven Grider
+                {state._owner.fullName}
               </span>
               <label className="created-at" style={{ paddingLeft: 15 }}>
                 <strong> Created:</strong>{' '}

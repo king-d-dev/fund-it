@@ -70,7 +70,7 @@ ProjectSchema.index({ title: 'text', description: 'text', category: 'text' });
 
 const InvestmentSchema = new Schema(
   {
-    _investor: { type: Schema.Types.ObjectId, ref: 'Investor' },
+    _investor: { type: Schema.Types.ObjectId, ref: 'User' },
     _project: { type: Schema.Types.ObjectId, ref: 'Project' },
     transactionDetails: { type: Object, required: true },
   },

@@ -43,7 +43,7 @@ function Project({ data }) {
                   color="green"
                   onClick={() =>
                     reactHistory.push({
-                      pathname: '/me/manage-project/' + data._id,
+                      pathname: `/me/manage-project/${data._id}`,
                       state: data,
                     })
                   }

@@ -108,18 +108,33 @@ async function fetch_projects(req, res) {
   let projects;
 
   if (req.query.category) {
-    projects = await Project.find({ category: req.query.category });
+    projects = await Project.find({ category: req.query.category }).populate(
+      '_owner'
+    );
   } else if (req.query.search) {
-    projects = await Project.find({ $text: { $search: req.query.search } });
+    projects = await Project.find({
+      $text: { $search: req.query.search },
+    }).populate('_owner');
   } else {
-    projects = await Project.find();
+    projects = await Project.find().populate('_owner');
   }
 
   return res.status(200).json({ data: projects });
 }
 
 async function featuredProjects(req, res) {
-  const projects = await Project.aggregate([{ $sample: { size: 10 } }]);
+  const projects = await Project.aggregate([
+    { $sample: { size: 10 } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_owner',
+        foreignField: '_id',
+        as: '_owner',
+      },
+    },
+    { $unwind: '$_owner' },
+  ]);
 
   return res.status(200).json({ data: projects });
 }
@@ -133,9 +148,26 @@ async function getUserProjects(req, res) {
   }
 }
 
+async function getProjectInvestors(req, res) {
+  const data = await Investment.find({
+    _project: req.params.projectId,
+  }).populate('_investor', '-password');
+
+  console.log('investors', data);
+  return res.json({ data });
+}
+
+async function getMyInvestments(req, res) {
+  const investments = await Investment.find({ _investor: req.user._id });
+
+  return res.json({ data: investments });
+}
+
 module.exports = {
   create_project,
   fetch_projects,
   getUserProjects,
   featuredProjects,
+  getProjectInvestors,
+  getMyInvestments,
 };

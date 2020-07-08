@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, Feed, Progress, Button } from 'semantic-ui-react';
+import { useHistory } from 'react-router-dom';
+import { Context as ProjectContext } from '../context/projectsContext';
 
 const FeedItem = ({ imgSrc, createdAt, content }) => {
   return (
@@ -20,8 +22,24 @@ const imgSrc1 = require('../assets/images/user-1.png');
 const imgSrc2 = require('../assets/images/user-2.png');
 
 const ProjectDetailSidePane = (props) => {
+  const { state: projectState, getProjectInvestors } = useContext(
+    ProjectContext
+  );
   let [randomColor, setRandomColor] = useState('purple');
-  // const reactHistory = useHistory();
+  let [loading, setLoadingTo] = useState(false);
+  let [error, setError] = useState('');
+  let [investors, setInvestors] = useState(null);
+  const reactHistory = useHistory();
+
+  useEffect(() => {
+    setLoadingTo(true);
+    getProjectInvestors(props.project._id, function (error, data) {
+      if (error) setError(error);
+      else setInvestors(data);
+      console.log('investors', data);
+      setLoadingTo(false);
+    });
+  }, []);
 
   function getRandomColor() {
     if (props.disableFundNow) return 'purple';
@@ -48,8 +66,10 @@ const ProjectDetailSidePane = (props) => {
         <Card.Header>
           <Progress color="green" percent={80} size="tiny">
             <span className="progress-content">
-              <span className="raised-amt">GH₵1500 </span>
-              raised of GH₵4000
+              <span className="raised-amt">
+                GH₵ {props.project.amountRaised}{' '}
+              </span>
+              raised of GH₵ {props.project.fundTarget}
             </span>
           </Progress>
           <div className="ui two buttons" style={{ marginTop: 20 }}>
@@ -67,7 +87,10 @@ const ProjectDetailSidePane = (props) => {
                   return;
                 }
 
-                window.open('https://paystack.com/pay/fund-it', '_self');
+                reactHistory.push(`/projects/${props.project._id}/fund-now`, {
+                  project: props.project,
+                });
+                // window.open('https://paystack.com/pay/fund-it', '_self');
               }}
             >
               Fund Now

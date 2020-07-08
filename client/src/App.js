@@ -16,7 +16,10 @@ import CreateProjectPage from './components/CreateProjectPage';
 import SignOutPage from './components/SignOutPage';
 import DashBoardPage from './components/DashBoardPage';
 import SettingsPage from './components/SettingsPage';
+import FundNowPage from './Pages/FundNowPage';
+import PaymentPage from './Pages/PaymentPage';
 import ManageProjectPage from './Pages/ManageProjectPage';
+import ManageInvestmentsPage from './Pages/ManageInvestmentsPage';
 
 import './styles/App.css';
 
@@ -41,6 +44,10 @@ function App() {
                 <ManageProjectPage />
               </Route>
 
+              <Route path="/me/investments">
+                <ManageInvestmentsPage />
+              </Route>
+
               <Route path="/settings">
                 <SettingsPage />
               </Route>
@@ -49,9 +56,13 @@ function App() {
                 <CreateProjectPage />
               </Route>
 
-              {/* <Route path="/projects/:projectId/fund-now">
-                <div>Hello world</div>
-              </Route> */}
+              <Route path="/projects/:projectId/fund-now">
+                <FundNowPage />
+              </Route>
+
+              <Route path="/projects/:projectId/pay">
+                <PaymentPage />
+              </Route>
 
               <Route path="/projects/:projectId">
                 <ProjectDetailPage />

@@ -59,6 +59,10 @@ function Header() {
   useEffect(() => {
     if (authState.user?.userType === 'investor') {
       let o = options.filter((i) => i.key !== 'create project');
+      o = o.map((i) => {
+        if (i.key === 'dashboard') i.route = '/me/investments';
+        return i;
+      });
       setOptionsState(o);
     }
   }, [options, authState.user]);
@@ -108,15 +112,8 @@ function Header() {
 
   return (
     <div id="Header">
-      <Link id="logo" to="/" style={{ color: '#000' }}>
-        {/* <h3>Fund it</h3> */}
-        <Image
-          css={css`
-            height: 60px;
-            width: 60px;
-          `}
-          src={require('../assets/images/logo.jpeg')}
-        />
+      <Link id="logo" to="/">
+        <Image size="small" src={require('../assets/images/funditt.png')} />
       </Link>
       <div className="navs">
         <div className="nav-item">
