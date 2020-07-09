@@ -158,9 +158,22 @@ async function getProjectInvestors(req, res) {
 }
 
 async function getMyInvestments(req, res) {
-  const investments = await Investment.find({ _investor: req.user._id });
+  Investment.find({
+    _investor: req.user._id,
+  })
+    .populate({
+      path: '_project',
+      model: 'Project',
+      populate: {
+        path: '_owner',
+        model: 'User',
+      },
+    })
+    .exec((error, docs) => {
+      if (error) return res.json({ error: error.message });
 
-  return res.json({ data: investments });
+      return res.json({ data: docs });
+    });
 }
 
 module.exports = {

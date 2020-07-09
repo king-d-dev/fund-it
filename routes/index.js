@@ -20,6 +20,7 @@ const {
 const {
   fundNow,
   createProjectInvestment,
+  getPaymentIntent,
 } = require('../controller/paymentController');
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -238,8 +239,11 @@ module.exports = (app) => {
   app.get('/api/projects/:projectId/investors', getProjectInvestors);
   app.get('/api/featured-projects', featuredProjects);
   app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
-  app.post('/api/projects/:projectId/fund-now', fundNow);
-  app.get('/api/me/investments', getMyInvestments);
+  app.get('/api/me/investments', requireAuth, getMyInvestments);
   app.get('/api/projects/:projectId/invest', createProjectInvestment);
   app.get('/api/user/:userId/projects', requireAuth, getUserProjects);
+
+  // payment routes
+  app.post('/api/projects/:projectId/fund-now', requireAuth, fundNow);
+  app.post('/api/payment-intent', requireAuth, getPaymentIntent);
 };

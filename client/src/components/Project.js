@@ -63,7 +63,10 @@ function Project({ data }) {
                       return;
                     }
 
-                    window.open('https://paystack.com/pay/fund-it', '_self');
+                    reactHistory.push(`/projects/${data._id}/fund-now`, {
+                      project: data,
+                    });
+                    // window.open('https://paystack.com/pay/fund-it', '_self');
                   }}
                 >
                   Fund Now

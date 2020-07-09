@@ -14,7 +14,7 @@ function FundNowPage() {
     <div css={styles.container}>
       <div css={styles.inputContainer}>
         <div className="ui right labeled input">
-          <div className="ui basic label">$</div>
+          <div className="ui basic label">GH₵</div>
           <input
             value={amount}
             onChange={(e) => setAmountTo(e.target.value)}

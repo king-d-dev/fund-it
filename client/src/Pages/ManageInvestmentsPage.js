@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 import DashBoardLayout from '../components/DashBoardLayout';
 import fundItApi from '../api/fundIt';
 import { css, jsx } from '@emotion/core';
@@ -17,10 +17,12 @@ function ManageInvestmentsPage() {
     fundItApi
       .get('/me/investments')
       .then(({ data }) => {
-        setInvestmentsTo(data);
+        console.log('data', data.data);
+        if (data.error) setErrorTo(data.error);
+        else setInvestmentsTo(data.data);
       })
       .catch((error) => {
-        setErrorTo(error);
+        setErrorTo(String(error));
       })
       .finally(() => {
         setLoadingTo(false);
@@ -33,27 +35,49 @@ function ManageInvestmentsPage() {
         <h1>My Investments</h1>
 
         <div css={styles.contentContainer}>
-          <Table color="green" key="green" size="large">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Title</Table.HeaderCell>
-                <Table.HeaderCell>Amount Invested</Table.HeaderCell>
-                <Table.HeaderCell>Actions</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
+          {loading ? <h3>Loading... </h3> : null}
 
-            <Table.Body>
-              {
+          {investments ? (
+            <Table color="green" key="green" size="large">
+              <Table.Header>
                 <Table.Row>
-                  <Table.Cell>Apples</Table.Cell>
-                  <Table.Cell>200</Table.Cell>
-                  <Table.Cell>
-                    <a href="">Show Investment Returns</a>
-                  </Table.Cell>
+                  <Table.HeaderCell>Project Title</Table.HeaderCell>
+                  <Table.HeaderCell>Amount Invested</Table.HeaderCell>
+                  <Table.HeaderCell>Project Owner</Table.HeaderCell>
+                  <Table.HeaderCell>Date of Payment</Table.HeaderCell>
+                  <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
-              }
-            </Table.Body>
-          </Table>
+              </Table.Header>
+
+              <Table.Body>
+                {investments.map((i) => (
+                  <Table.Row key={i._id}>
+                    <Table.Cell>{i._project.title}</Table.Cell>
+                    <Table.Cell>{i.transactionDetails.amount}</Table.Cell>
+                    <Table.Cell>{i._project._owner.fullName}</Table.Cell>
+                    <Table.Cell>
+                      {new Date(i.createdAt).toDateString()}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {/* <Button basic color="blue">
+                        View
+                      </Button> */}
+                      <div
+                        css={css`
+                          border-radius: 4px;
+                          border: 1px solid blue;
+                          text-align: center;
+                          padding: 10px;
+                        `}
+                      >
+                        <a href="">Show Investment Returns</a>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          ) : null}
         </div>
       </div>
     </DashBoardLayout>
@@ -64,12 +88,13 @@ export default ManageInvestmentsPage;
 
 const styles = {
   container: css`
+    flex-grow: 2;
     display: flex;
     flex-direction: column;
     padding: 20px;
   `,
   contentContainer: css`
-    width: 100%;
-    background-color: blue;
+    /* height: calc(100vh - ${window.headerHeight}); */
+    /* background-color: blue; */
   `,
 };
