@@ -36,14 +36,13 @@ const reducer = (state, { type, payload }) => {
 };
 
 const initialState = {
-  title: 'A novel Approach',
-  description:
-    'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis odit magnam voluptatum incidunt tenetur minus eligendi temporibus rerum placeat eum. Laboriosam neque dolores placeat illo necessitatibus facilis reiciendis sapiente dicta.',
-  category: 'Engineering & Manufacturing',
-  BIN: 'BN1556165151',
-  returnRate: '5',
-  returnPeriod: 'Monthly',
-  fundTarget: '5000',
+  title: '',
+  description: '',
+  category: '',
+  BIN: '',
+  returnRate: '',
+  returnPeriod: '',
+  fundTarget: '',
 };
 
 function CreateProjectPage() {

@@ -7,33 +7,33 @@ import {
   Button,
   Select,
   Label,
-  Input
+  Input,
 } from 'semantic-ui-react';
 
 import { Context as authContext } from '../context/authContext';
 
 const accountOptions = [
   { key: 'a', value: 'solicitor', text: 'Solicitor' },
-  { key: '', value: 'investor', text: 'Investor' }
+  { key: '', value: 'investor', text: 'Investor' },
 ];
 
 const idTypes = [
   { key: 'a', value: 'Voters', text: 'Voters' },
   { key: 'b', value: 'NHIS', text: 'NHIS' },
-  { key: 'c', value: 'National ID', text: 'National ID' }
+  { key: 'c', value: 'National ID', text: 'National ID' },
 ];
 
 const initialState = {
-  fullName: 'Ben Parker',
-  email: 'benparker@gmail.com',
-  phoneNumber: '51651651651',
-  idType: 'Voters',
-  idNumber: 'GH651651651561515',
-  userType: 'solicitor',
-  password: '12345678',
-  confirmPassword: '12345678',
+  fullName: '',
+  email: '',
+  phoneNumber: '',
+  idType: '',
+  idNumber: '',
+  userType: '',
+  password: '',
+  confirmPassword: '',
   photo: '',
-  errorMessage: ''
+  errorMessage: '',
 };
 
 const reducer = (state, { type, payload }) => {
@@ -75,7 +75,7 @@ function RegiserPage() {
     }
   }, [authState, reactHistory]);
 
-  const showErrorProp = formField => {
+  const showErrorProp = (formField) => {
     const error = authState.errors[formField];
     if (!error || !error.length) return {};
 
@@ -83,12 +83,12 @@ function RegiserPage() {
     return {
       error: {
         content: message,
-        pointing: 'below'
-      }
+        pointing: 'below',
+      },
     };
   };
 
-  const submitForm = e => {
+  const submitForm = (e) => {
     e.preventDefault();
     createUserAccount(state);
   };
@@ -109,7 +109,7 @@ function RegiserPage() {
             name="fullName"
             placeholder="eg: Ben"
             value={state.fullName}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({ type: 'setfullName', payload: e.target.value })
             }
             {...showErrorProp('fullName')}
@@ -121,7 +121,7 @@ function RegiserPage() {
             name="email"
             placeholder="eg: benparker@gmail.com"
             value={state.email}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({ type: 'setemail', payload: e.target.value })
             }
             {...showErrorProp('email')}
@@ -158,7 +158,7 @@ function RegiserPage() {
             name="idNumber"
             placeholder="eg: GH54312030316"
             value={state.idNumber}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({ type: 'setidNumber', payload: e.target.value })
             }
             {...showErrorProp('idNumber')}
@@ -170,7 +170,7 @@ function RegiserPage() {
             name="phoneNumber"
             placeholder="eg: 024613516"
             value={state.phoneNumber}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({ type: 'setphoneNumber', payload: e.target.value })
             }
           />
@@ -194,7 +194,7 @@ function RegiserPage() {
             placeholder="eg: *********"
             type="password"
             value={state.password}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({ type: 'setpassword', payload: e.target.value })
             }
             {...showErrorProp('password')}
@@ -207,10 +207,10 @@ function RegiserPage() {
             placeholder="It should match with the first one"
             type="password"
             value={state.confirmPassword}
-            onChange={e =>
+            onChange={(e) =>
               dispatch({
                 type: 'setconfirmPassword',
-                payload: e.target.value
+                payload: e.target.value,
               })
             }
             {...showErrorProp('confirmPassword')}

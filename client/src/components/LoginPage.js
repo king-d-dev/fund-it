@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Modal, Form, Button, Input, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +8,13 @@ function LoginPage() {
   const [email, setEmail] = useState('benparker@gmail.com');
   const [password, setPassword] = useState('12345678');
   const { state: authState, login } = useContext(authContext);
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') {
+      setEmail('');
+      setPassword('');
+    }
+  }, []);
 
   function submitForm(e) {
     e.preventDefault();
@@ -24,7 +31,7 @@ function LoginPage() {
             control={Input}
             placeholder="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <Form.Field
@@ -33,7 +40,7 @@ function LoginPage() {
             placeholder="Password"
             type="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <Form.Group>
