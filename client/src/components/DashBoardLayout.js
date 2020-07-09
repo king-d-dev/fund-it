@@ -35,6 +35,7 @@ const styles = {
     background-color: #fdfdfd4d;
   `,
   userDetails: css`
+    position: sticky;
     color: #fff;
     width: 20%;
     background-color: #011b33;

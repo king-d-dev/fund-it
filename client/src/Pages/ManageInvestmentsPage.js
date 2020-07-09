@@ -53,7 +53,9 @@ function ManageInvestmentsPage() {
                 {investments.map((i) => (
                   <Table.Row key={i._id}>
                     <Table.Cell>{i._project.title}</Table.Cell>
-                    <Table.Cell>{i.transactionDetails.amount / 10}</Table.Cell>
+                    <Table.Cell>
+                      GH₵ {i.transactionDetails.amount / 10}
+                    </Table.Cell>
                     <Table.Cell>{i._project._owner.fullName}</Table.Cell>
                     <Table.Cell>
                       {new Date(i.createdAt).toDateString()}

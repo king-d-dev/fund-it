@@ -1,16 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, Image, Button } from 'semantic-ui-react';
 import { Context as authContext } from '../context/authContext';
+import fundItAPi from '../api/fundIt';
 
 function Project({ data }) {
   const reactHistory = useHistory();
   const { state: authState } = useContext(authContext);
+  const [isDeleting, setIsDeletingTo] = useState(false);
+  const [error, setError] = useState('');
 
   const disableFundNow = () => {
     if (authState.user) return authState.user.userType === 'solicitor';
 
     return false;
+  };
+
+  const deleteProject = () => {
+    setIsDeletingTo(true);
+    fundItAPi
+      .delete(`/projects/${data._id}`)
+      .then(({ data }) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        setError(String(error));
+      })
+      .finally(() => {
+        setIsDeletingTo(false);
+      });
   };
 
   return (
@@ -50,6 +68,16 @@ function Project({ data }) {
                 >
                   View
                 </Button>
+                {data.amountRaised === 0 ? (
+                  <Button
+                    disabled={isDeleting}
+                    basic
+                    color="red"
+                    onClick={deleteProject}
+                  >
+                    {isDeleting ? 'Deleting...' : 'Delete'}
+                  </Button>
+                ) : null}
               </div>
             ) : (
               <div className="ui two buttons">
@@ -66,7 +94,6 @@ function Project({ data }) {
                     reactHistory.push(`/projects/${data._id}/fund-now`, {
                       project: data,
                     });
-                    // window.open('https://paystack.com/pay/fund-it', '_self');
                   }}
                 >
                   Fund Now

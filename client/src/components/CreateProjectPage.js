@@ -191,15 +191,17 @@ function CreateProjectPage() {
             {...showErrorProp('photo')}
           />
 
-          <Form.Field
+          <Form.Input
             label="Project Description"
             control={TextArea}
+            value={state.desciption}
             name="description"
-            placeholder="Please provide a short description of the project"
-            value={state.description}
             onChange={(e) =>
               dispatch({ type: 'setDescription', payload: e.target.value })
             }
+            fluid
+            placeholder="Please provide a short description of the projects"
+            id="form-input-description"
             style={{ minHeight: 100 }}
             {...showErrorProp('description')}
           />

@@ -16,6 +16,7 @@ const {
   getUserProjects,
   getProjectInvestors,
   getMyInvestments,
+  deleteProject,
 } = require('../controller/projectControler');
 const {
   fundNow,
@@ -239,6 +240,7 @@ module.exports = (app) => {
   app.get('/api/projects/:projectId/investors', getProjectInvestors);
   app.get('/api/featured-projects', featuredProjects);
   app.get('/api/projects/:projectId', PARAM_projectId, fetch_project);
+  app.delete('/api/projects/:projectId', requireAuth, deleteProject);
   app.get('/api/me/investments', requireAuth, getMyInvestments);
   app.get('/api/projects/:projectId/invest', createProjectInvestment);
   app.get('/api/user/:userId/projects', requireAuth, getUserProjects);

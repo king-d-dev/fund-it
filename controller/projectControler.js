@@ -100,6 +100,12 @@ async function create_project(req, res) {
 
     return res.json({ success: true, data: createdProject });
   } catch (error) {
+    if (error.message.search('BIN') !== -1) {
+      return res.status(500).json({
+        errorMessage:
+          'Please make sure you provide a unique Business Identification Number',
+      });
+    }
     return res.status(500).json({ errorMessage: error.message });
   }
 }
@@ -151,10 +157,14 @@ async function getUserProjects(req, res) {
 async function getProjectInvestors(req, res) {
   const data = await Investment.find({
     _project: req.params.projectId,
-  }).populate('_investor', '-password');
+  })
+    .populate('_investor', '-password')
+    .populate('_project')
+    .exec((error, docs) => {
+      if (error) return res.status(400).json({ error: error.message });
 
-  console.log('investors', data);
-  return res.json({ data });
+      return res.json({ data: docs });
+    });
 }
 
 async function getMyInvestments(req, res) {
@@ -176,6 +186,21 @@ async function getMyInvestments(req, res) {
     });
 }
 
+async function deleteProject(req, res) {
+  try {
+    const res = await Project.deleteOne({
+      _id: req.params.projectId,
+      _owner: req.user._id,
+    });
+    console.log('delete', res);
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.log('error', error);
+    return res.json({ success: false });
+  }
+}
+
 module.exports = {
   create_project,
   fetch_projects,
@@ -183,4 +208,5 @@ module.exports = {
   featuredProjects,
   getProjectInvestors,
   getMyInvestments,
+  deleteProject,
 };
