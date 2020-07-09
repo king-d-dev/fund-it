@@ -60,7 +60,7 @@ function PaymentPage() {
       const {
         data: { client_secret },
       } = await fundItApi.post('/payment-intent', {
-        amount: reactLocation.state.amount * 100,
+        amount: reactLocation.state.amount * 10,
       });
 
       // Use your card Element with other Stripe.js APIs

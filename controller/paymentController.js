@@ -19,7 +19,7 @@ async function fundNow(req, res) {
       }),
       Project.updateOne(
         { _id: req.params.projectId },
-        { $inc: { amountRaised: transactionDetails.amount } }
+        { $inc: { amountRaised: transactionDetails.amount / 10 } }
       ),
     ]);
 

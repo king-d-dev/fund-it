@@ -29,13 +29,6 @@ let options = [
     value: 'create project',
     route: '/create-project',
   },
-  // {
-  //   key: 'settings',
-  //   text: 'Settings',
-  //   icon: 'settings',
-  //   value: 'settings',
-  //   route: '/settings',
-  // },
   {
     key: 'sign-out',
     text: 'Sign Out',
@@ -59,13 +52,17 @@ function Header() {
   useEffect(() => {
     if (authState.user?.userType === 'investor') {
       let o = options.filter((i) => i.key !== 'create project');
+
       o = o.map((i) => {
-        if (i.key === 'dashboard') i.route = '/me/investments';
-        return i;
+        if (i.key === 'dashboard') return { ...i, route: '/me/investments' };
+        else return i;
       });
+
       setOptionsState(o);
+    } else if (authState.user?.userType === 'solicitor') {
+      setOptionsState(options);
     }
-  }, [options, authState.user]);
+  }, [authState.user]);
 
   const renderAuthStatus = () => {
     if (authState.token) {

@@ -53,15 +53,12 @@ function ManageInvestmentsPage() {
                 {investments.map((i) => (
                   <Table.Row key={i._id}>
                     <Table.Cell>{i._project.title}</Table.Cell>
-                    <Table.Cell>{i.transactionDetails.amount}</Table.Cell>
+                    <Table.Cell>{i.transactionDetails.amount / 10}</Table.Cell>
                     <Table.Cell>{i._project._owner.fullName}</Table.Cell>
                     <Table.Cell>
                       {new Date(i.createdAt).toDateString()}
                     </Table.Cell>
                     <Table.Cell>
-                      {/* <Button basic color="blue">
-                        View
-                      </Button> */}
                       <div
                         css={css`
                           border-radius: 4px;
