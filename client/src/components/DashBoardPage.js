@@ -65,7 +65,7 @@ function DashBoardPage() {
               ) : null}
 
               <Grid>
-                <Grid.Row columns={2}>
+                <Grid.Row columns={3}>
                   {projects.map((proj, i) => (
                     <Grid.Column key={i.toString()}>
                       <Project data={proj} />

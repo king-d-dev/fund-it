@@ -129,9 +129,9 @@ function Header() {
           </NavLink>
         </div>
         <div className="nav-item">
-          <NavLink to="contact-us" exact>
+          {/* <NavLink to="contact-us" exact>
             Contact Us
-          </NavLink>
+          </NavLink> */}
         </div>
 
         {renderAuthStatus()}

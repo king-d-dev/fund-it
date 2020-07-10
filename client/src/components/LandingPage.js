@@ -45,18 +45,10 @@ function LandingPage() {
 
       <div id="LandingPage">
         <div className="main-content">
-          <div className="marketing-text-wrapper">
-            <div className="marketng_text">
-              <h3>Make a difference</h3>
-              <label style={styles.label}>
-                <span style={{ opacity: 100 }}>
-                  Big things start small. A new way to raise capital for your
-                  business idea. As an investor, a new way to keep your money
-                  busy for more returns.
-                </span>
-              </label>
-            </div>
+          <div css={styles.sliderWrapper}>
+            <Slider />
           </div>
+
           <div className="featured-projects-wrapper">
             <h2 style={styles.featredProjectsHeader}>Featured Projects</h2>
 
@@ -75,7 +67,7 @@ function LandingPage() {
                 ) : null}
 
                 <Grid>
-                  <Grid.Row columns={3}>
+                  <Grid.Row columns={4}>
                     {data.map((proj, i) => (
                       <Grid.Column key={i.toString()}>
                         <Project data={proj} />
@@ -90,6 +82,32 @@ function LandingPage() {
           </div>
         </div>
       </div>
+
+      <footer css={styles.footerWrapper}>
+        <img
+          css={css`
+            height: 300px;
+            width: 300px;
+            padding: 0;
+            margin: 0;
+          `}
+          src={require('../assets/images/funditt.png')}
+        />
+
+        <h3
+          css={css`
+            width: 40%;
+            text-align: center;
+            color: #fff;
+            opacity: 0.5;
+          `}
+        >
+          Fundit is a crowd funding investment website to get investments for
+          your ideas. Bring your ideas to fruition by creating Projects and get
+          people to fund it. Are you an investor? Make money by investing in
+          good ideas.
+        </h3>
+      </footer>
     </React.Fragment>
   );
 }
@@ -100,7 +118,7 @@ const styles = {
   sliderWrapper: css`
     width: 100vw;
     height: calc(100vh - ${window.headerHeight});
-    background-color: blue;
+    background: linear-gradient(45.34deg, #ea52f8 5.66%, #0066ff 94.35%);
   `,
   label: {
     textAlign: 'center',
@@ -114,4 +132,13 @@ const styles = {
     fontSize: '35px',
     marginBottom: 40,
   },
+  footerWrapper: css`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    padding-bottom: 140px;
+    background-color: #1b1b1b;
+  `,
 };

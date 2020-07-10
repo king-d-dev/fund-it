@@ -40,7 +40,7 @@ function Project({ data }) {
     <div className="Project" style={{ marginBottom: 40 }}>
       <div className="featured-projects">
         <Card>
-          <Image src={data.photo} wrapped ui={false} />
+          <Image src={data.photo} wrapped ui={true} />
           <Card.Content>
             <Card.Header>{data.title}</Card.Header>
             <Card.Meta>

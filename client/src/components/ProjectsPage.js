@@ -118,7 +118,7 @@ function ProjectsPage() {
             ) : null}
 
             <Grid>
-              <Grid.Row columns={3}>
+              <Grid.Row columns={4}>
                 {localProjects.map((proj, i) => (
                   <Grid.Column key={i.toString()}>
                     <Project data={proj} />
