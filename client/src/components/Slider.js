@@ -59,7 +59,6 @@ function Slider() {
               </h1>
               <p key="p" css={styles.smallText}>
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris
               </p>
             </QueueAnim>
             <TweenOne
@@ -73,7 +72,6 @@ function Slider() {
             >
               <span css={styles.smallText}>
                 Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum
               </span>
             </TweenOne>
           </div>
