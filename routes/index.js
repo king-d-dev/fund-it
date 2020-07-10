@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const FormData = require('form-data');
 const bcrypt = require('bcrypt');
 const jwt = require('jwt-simple');
 const passport = require('passport');
@@ -104,44 +105,39 @@ async function create_user_account(req, res) {
     return res.status(401).json({ errors });
   }
 
+  const formData = new FormData();
+  formData.append('image', req.files.photo.data);
+
+  const config = {
+    method: 'post',
+    url: 'https://api.imgur.com/3/image',
+    headers: {
+      Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
+      ...formData.getHeaders(),
+    },
+    data: formData,
+  };
+
   try {
+    const { data } = await axios(config);
     const hash = await bcrypt.hash(password, 10);
 
-    if (req.files && req.files.photo) {
-      const store = path.resolve(__dirname, '..', 'store');
-      const image_path = path.join(store, req.files.photo.name);
+    const user = await User.create({
+      ...req.body,
+      password: hash,
+      userType: req.query.userType,
+      photo: data.data.link,
+    });
 
-      if (!fs.existsSync(store)) {
-        fs.mkdirSync(store);
-      }
-      req.files.photo.mv(image_path, async (error) => {
-        if (error) return res.status(500).send(error.message);
+    const token = generateToken(user);
 
-        /**
-            in cases where req.file is not available, variable uploadedImage is never 
-            created causing an error here 
-          */
-        User.create({
-          ...req.body,
-          password: hash,
-          userType: req.query.userType,
-          photo: image_path,
-        })
-          .then((user) => {
-            const token = generateToken(user);
-
-            return res.status(200).json({ token, user });
-          })
-          .catch((error) => {
-            return res.status(500).send({ errorMessage: error.message });
-          });
-      });
-    }
+    return res.status(200).json({ token, user });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .send('something went bad while processing your request');
+    return res.status(500).json({
+      errorMessage:
+        error.message || 'something went bad while processing your request',
+    });
   }
 }
 
