@@ -1,7 +1,7 @@
 .marketing-text-wrapper {
   background: url('../assets/images/bg_img.jpg') center center no-repeat;
   background-size: cover;
-  height: 500px;
+  height: calc(100vh - 60px);
 }
 
 .marketng_text h3 {

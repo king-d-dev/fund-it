@@ -3,6 +3,7 @@ import { Grid, Image } from 'semantic-ui-react';
 import SweetAlert from 'sweetalert-react';
 import Project from './Project';
 import fundItApi from '../api/fundIt';
+import Slider from './Slider';
 import '../styles/LandingPage.css';
 
 import { css, jsx } from '@emotion/core';
@@ -96,6 +97,11 @@ function LandingPage() {
 export default LandingPage;
 
 const styles = {
+  sliderWrapper: css`
+    width: 100vw;
+    height: calc(100vh - ${window.headerHeight});
+    background-color: blue;
+  `,
   label: {
     textAlign: 'center',
     backgroundColor: '#0000007d',

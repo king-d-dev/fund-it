@@ -3,6 +3,9 @@ import { useHistory } from 'react-router-dom';
 import { Card, Image, Button } from 'semantic-ui-react';
 import { Context as authContext } from '../context/authContext';
 import fundItAPi from '../api/fundIt';
+import { css, jsx } from '@emotion/core';
+// this comment tells babel to convert jsx to calls to a function called jsx instead of React.createElement
+/** @jsx jsx */
 
 function Project({ data }) {
   const reactHistory = useHistory();
@@ -11,6 +14,8 @@ function Project({ data }) {
   const [error, setError] = useState('');
 
   const disableFundNow = () => {
+    if (data.amountRaised >= data.fundTarget) return true;
+
     if (authState.user) return authState.user.userType === 'solicitor';
 
     return false;
@@ -39,8 +44,20 @@ function Project({ data }) {
           <Card.Content>
             <Card.Header>{data.title}</Card.Header>
             <Card.Meta>
-              <span className="target">
-                Amount Raised: GH₵{data.amountRaised}
+              <span
+                className="target"
+                css={css`
+                  color: #1b1b1b;
+                `}
+              >
+                Amount Raised:{' '}
+                <strong
+                  css={css`
+                    color: #4cbb17;
+                  `}
+                >
+                  GH₵{data.amountRaised}
+                </strong>
               </span>
             </Card.Meta>
             <span className="target">

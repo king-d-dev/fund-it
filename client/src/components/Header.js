@@ -123,7 +123,7 @@ function Header() {
             Projects
           </NavLink>
         </div>
-        {/* <div className="nav-item">
+        <div className="nav-item">
           <NavLink to="/about-us" exact>
             About Us
           </NavLink>
@@ -132,7 +132,7 @@ function Header() {
           <NavLink to="contact-us" exact>
             Contact Us
           </NavLink>
-        </div> */}
+        </div>
 
         {renderAuthStatus()}
       </div>
