@@ -32,10 +32,7 @@ function ProjectDetailPage(props) {
               <span style={{ marginRight: 10 }}>
                 <strong>By</strong>
               </span>
-              <Image
-                src={state._owner.photo || require('../assets/images/user.jpg')}
-                avatar
-              />
+              <Image src={state._owner.photo} avatar />
               <span
                 style={{ borderRight: '2px solid #dadada', paddingRight: 15 }}
               >

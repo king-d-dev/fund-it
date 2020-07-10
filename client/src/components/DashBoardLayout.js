@@ -16,11 +16,7 @@ function DashBoardPage({ children }) {
   return (
     <div css={styles.container}>
       <div id="user-details" css={styles.userDetails}>
-        <Image
-          src={user.photo || require('../assets/images/user-1.png')}
-          size="small"
-          style={{ borderRadius: '50%' }}
-        />
+        <Image src={user.photo} size="small" style={{ borderRadius: '50%' }} />
         <h1> {user.fullName} </h1>
 
         <div

@@ -78,11 +78,7 @@ function Header() {
 
       const trigger = (
         <span style={{ fontWeight: 600 }}>
-          <Image
-            avatar
-            src={authState.user.photo || require('../assets/images/user.jpg')}
-          />{' '}
-          {authState.user.fullName}
+          <Image avatar src={authState.user.photo} /> {authState.user.fullName}
         </span>
       );
 
